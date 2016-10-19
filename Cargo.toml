@@ -1,0 +1,12 @@
+[package]
+name = "moonlander-gp"
+version = "0.1.0"
+authors = ["Rico Huijbers <rix0rrr@gmail.com>"]
+license = "MIT"
+
+
+[dependencies]
+rand = "0.3"
+rustc-serialize = "0.3"
+log = "*"
+downcast-rs = "*"
