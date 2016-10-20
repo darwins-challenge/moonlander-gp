@@ -1,5 +1,4 @@
 use super::genetic::Fitness;
-use std::rc::Rc;
 use rand::Rng;
 use super::{RandNode, Number};
 use super::num::{sum, partial_max};
@@ -7,7 +6,7 @@ use super::num::{sum, partial_max};
 /// A population with the root of the indicated type
 pub struct Population<P: Clone, F: Fitness+Sized> {
     /// Collection of algorithms
-    pub population: Vec<Rc<P>>,
+    pub population: Vec<P>,
 
     /// Generation index of this population
     pub generation: u32,
@@ -30,10 +29,6 @@ impl <P: Clone, F: Fitness+Sized> Population<P, F> {
 
     /// Add a single program to the population
     pub fn add(&mut self, program: P) {
-        self.population.push(Rc::new(program));
-    }
-
-    pub fn add_rc(&mut self, program: Rc<P>) {
         self.population.push(program);
     }
 
@@ -46,7 +41,7 @@ impl <P: Clone, F: Fitness+Sized> Population<P, F> {
         where S: Fn(&P, &mut Rng) -> F
     {
         // FIXME: Parallelize?
-        self.scores = self.population.iter().map(|p| scoring_fn(p.as_ref(), rng)).collect();
+        self.scores = self.population.iter().map(|p| scoring_fn(p, rng)).collect();
     }
 
     pub fn avg_score(&self) -> Number {

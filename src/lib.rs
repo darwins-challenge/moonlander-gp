@@ -1,8 +1,9 @@
 extern crate rand;
 extern crate rustc_serialize;
+extern crate rayon;
 
 #[macro_use]
-extern crate downcast_rs;
+extern crate downcast;
 
 #[macro_use]
 extern crate log;

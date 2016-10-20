@@ -1,12 +1,15 @@
 //! Implementation of Santa Fe Ant Trail
 //!
 //! http://www0.cs.ucl.ac.uk/staff/ucacbbl/bloat_csrp-97-29/node2.html
+//!
+//! Experimentation seems to show that crossover in general performs much
+//! better than mutation. Some small amount of mutation is left in to get
+//! out of local optima.
 
 #[macro_use]
 extern crate moonlander_gp;
 extern crate rand;
 
-use std::rc::Rc;
 use moonlander_gp::{AstNode, clone_or_replace, RandNode, Population, random_population};
 use moonlander_gp::genetic::{SimpleFitness, evolve, Weights, tournament_selection};
 use moonlander_gp::num::torus;
@@ -30,14 +33,12 @@ fn main() {
         crossover: 70
     };
 
-    let selector = tournament_selection(TOURNAMENT_SIZE);
-
     let mut pop : AntPopulation = random_population(POPULATION_SIZE, &mut rng);
     for gen in 0..NR_GENERATIONS {
         pop.score(score_ant, &mut rng);
         println!("Generation {}, best {}, average {}", gen, pop.best_score(), pop.avg_score());
 
-        pop = evolve(&pop, selector.as_ref(), &weights, &mut rng);
+        pop = evolve(pop, &weights, &mut rng, |p, r| tournament_selection(TOURNAMENT_SIZE, p, r));
     }
 }
 
@@ -162,11 +163,15 @@ enum Command {
 impl AstNode for Command {
     fn node_type(&self) -> usize { 0 }
 
-    fn children(&self) -> Vec<Rc<AstNode>> {
+    fn children(&self) -> Vec<&AstNode> {
         vec![]
     }
 
-    fn replace_child(&self, _: &AstNode, _: &AstNode) -> Box<AstNode> {
+    fn replace_child(&self, _: &AstNode, _: &mut Option<Box<AstNode>>) -> Box<AstNode> {
+        Box::new(self.clone())
+    }
+
+    fn copy(&self) -> Box<AstNode> {
         Box::new(self.clone())
     }
 }
@@ -188,25 +193,25 @@ impl RandNode for Command {
 
 #[derive(Clone)]
 enum Statement {
-    IfFoodAhead(Rc<Statement>, Rc<Statement>),
-    Prog2(Rc<Statement>, Rc<Statement>),
-    Prog3(Rc<Statement>, Rc<Statement>, Rc<Statement>),
-    Command(Rc<Command>)
+    IfFoodAhead(Box<Statement>, Box<Statement>),
+    Prog2(Box<Statement>, Box<Statement>),
+    Prog3(Box<Statement>, Box<Statement>, Box<Statement>),
+    Command(Box<Command>)
 }
 
 impl AstNode for Statement {
     fn node_type(&self) -> usize { 1 }
 
-    fn children(&self) -> Vec<Rc<AstNode>> {
+    fn children(&self) -> Vec<&AstNode> {
         match *self {
-            Statement::IfFoodAhead(ref then, ref els) => vec![then.clone(), els.clone()],
-            Statement::Prog2(ref one, ref two) => vec![one.clone(), two.clone()],
-            Statement::Prog3(ref one, ref two, ref three) => vec![one.clone(), two.clone(), three.clone()],
-            Statement::Command(ref cmd) => vec![cmd.clone()]
+            Statement::IfFoodAhead(ref then, ref els) => vec![then.as_ref(), els.as_ref()],
+            Statement::Prog2(ref one, ref two) => vec![one.as_ref(), two.as_ref()],
+            Statement::Prog3(ref one, ref two, ref three) => vec![one.as_ref(), two.as_ref(), three.as_ref()],
+            Statement::Command(ref cmd) => vec![cmd.as_ref()]
         }
     }
 
-    fn replace_child(&self, old_child: &AstNode, new_child: &AstNode) -> Box<AstNode> {
+    fn replace_child(&self, old_child: &AstNode, new_child: &mut Option<Box<AstNode>>) -> Box<AstNode> {
         Box::new(match *self {
             Statement::IfFoodAhead(ref then, ref els) => Statement::IfFoodAhead(
                 clone_or_replace(then, old_child, new_child),
@@ -221,15 +226,19 @@ impl AstNode for Statement {
             Statement::Command(ref cmd) => Statement::Command(clone_or_replace(cmd, old_child, new_child))
         })
     }
+
+    fn copy(&self) -> Box<AstNode> {
+        Box::new(self.clone())
+    }
 }
 
 impl RandNode for Statement {
     fn rand(rng: &mut Rng) -> Statement {
         pick![rng,
-            1, Statement::IfFoodAhead(Rc::new(Statement::rand(rng)), Rc::new(Statement::rand(rng))),
-            1, Statement::Prog2(Rc::new(Statement::rand(rng)), Rc::new(Statement::rand(rng))),
-            1, Statement::Prog3(Rc::new(Statement::rand(rng)), Rc::new(Statement::rand(rng)), Rc::new(Statement::rand(rng))),
-            5, Statement::Command(Rc::new(Command::rand(rng)))
+            1, Statement::IfFoodAhead(Box::new(Statement::rand(rng)), Box::new(Statement::rand(rng))),
+            1, Statement::Prog2(Box::new(Statement::rand(rng)), Box::new(Statement::rand(rng))),
+            1, Statement::Prog3(Box::new(Statement::rand(rng)), Box::new(Statement::rand(rng)), Box::new(Statement::rand(rng))),
+            5, Statement::Command(Box::new(Command::rand(rng)))
             ]
     }
 }

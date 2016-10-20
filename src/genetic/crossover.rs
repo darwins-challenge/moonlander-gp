@@ -9,9 +9,9 @@ use super::super::{AstNode, Mutatable};
 use super::super::ast::{NodeAndParent, find_nodes_and_parents, replace_to_root};
 
 /// Pick two random nodes and cross them over
-pub fn crossover_tree<T: AstNode+Mutatable+Clone, R: rand::Rng+Sized>(ast1: Rc<T>, ast2: Rc<T>, rng: &mut R) -> (Rc<T>, Rc<T>) {
-    let nodes1 = group_by_type(find_nodes_and_parents(ast1.clone()));
-    let nodes2 = group_by_type(find_nodes_and_parents(ast2.clone()));
+pub fn crossover_tree<T: AstNode+Mutatable+Clone, R: rand::Rng+Sized>(ast1: &T, ast2: &T, rng: &mut R) -> (Box<T>, Box<T>) {
+    let nodes1 = group_by_type(find_nodes_and_parents(ast1));
+    let nodes2 = group_by_type(find_nodes_and_parents(ast2));
 
     // Return all types that are in both maps (there is guaranteed to be at least 1)
     let shared_node_types = nodes1.iter()
@@ -23,8 +23,8 @@ pub fn crossover_tree<T: AstNode+Mutatable+Clone, R: rand::Rng+Sized>(ast1: Rc<T
     let nap1 = rng.choose(&nodes1.get(typ).unwrap()).unwrap();
     let nap2 = rng.choose(&nodes2.get(typ).unwrap()).unwrap();
 
-    let child1 = replace_to_root::<T>(&nap1, nap2.node.as_ref());
-    let child2 = replace_to_root::<T>(&nap2, nap1.node.as_ref());
+    let child1 = replace_to_root::<T>(&nap1, nap2.node.copy());
+    let child2 = replace_to_root::<T>(&nap2, nap1.node.copy());
 
     (child1, child2)
 }
