@@ -170,10 +170,6 @@ impl AstNode for Command {
     fn replace_child(&self, _: &AstNode, _: &mut Option<Box<AstNode>>) -> Box<AstNode> {
         Box::new(self.clone())
     }
-
-    fn copy(&self) -> Box<AstNode> {
-        Box::new(self.clone())
-    }
 }
 
 fn random_command(rng: &mut Rng) -> Command {
@@ -225,10 +221,6 @@ impl AstNode for Statement {
                 clone_or_replace(three, old_child, new_child)),
             Statement::Command(ref cmd) => Statement::Command(clone_or_replace(cmd, old_child, new_child))
         })
-    }
-
-    fn copy(&self) -> Box<AstNode> {
-        Box::new(self.clone())
     }
 }
 

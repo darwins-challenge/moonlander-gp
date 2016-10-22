@@ -6,7 +6,7 @@ use rand::Rng;
 //----------------------------------------------------------------------
 // AST Traits
 
-pub trait AstNode: Any+Mutatable {
+pub trait AstNode: Any+Mutatable+Copyable {
     /// Identify the node type, because we can't use get_type_id().
     fn node_type(&self) -> usize;
 
@@ -14,9 +14,6 @@ pub trait AstNode: Any+Mutatable {
     fn children(&self) -> Vec<&AstNode>;
 
     fn replace_child(&self, old_child: &AstNode, new_child: &mut Option<Box<AstNode>>) -> Box<AstNode>;
-
-    /// Like clone(), but unsized. Necessary during crossover.
-    fn copy(&self) -> Box<AstNode>;
 }
 
 impl_downcast!(AstNode);
@@ -25,6 +22,16 @@ downcast_methods!(AstNode);
 pub trait Mutatable {
     /// Return a mutation of this node
     fn mutate(&self, rng: &mut Rng) -> Box<AstNode>;
+}
+
+pub trait Copyable {
+    /// Like clone(), but unsized. Necessary during crossover.
+    fn copy(&self) -> Box<AstNode>;
+}
+
+/// Default implementation of Copyable for nodes that are Clone
+impl <T: Clone+AstNode> Copyable for T {
+    fn copy(&self) -> Box<AstNode> { Box::new(self.clone()) }
 }
 
 /// A trait like rand::Rand, but one that doesn't require that the Rng instance is Sized,
@@ -154,8 +161,6 @@ mod tests {
                                                                 clone_or_replace(y, old_child, new_child)),
             })
         }
-
-        fn copy(&self) -> Box<AstNode> { Box::new(self.clone()) }
     }
 
     impl Mutatable for TestNode {

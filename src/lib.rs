@@ -19,7 +19,7 @@ mod ast;
 mod population;
 pub use self::population::{Population, random_population};
 
-pub use ast::{AstNode, Mutatable, RandNode, clone_or_replace};
+pub use ast::{AstNode, Mutatable, RandNode, clone_or_replace, depth};
 pub mod num;
 
 pub mod genetic;
