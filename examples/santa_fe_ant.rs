@@ -10,7 +10,7 @@
 extern crate moonlander_gp;
 extern crate rand;
 
-use moonlander_gp::{AstNode, clone_or_replace, RandNode, Population, random_population};
+use moonlander_gp::{RandNode, Population, random_population};
 use moonlander_gp::genetic::{SimpleFitness, evolve, Weights, tournament_selection};
 use moonlander_gp::num::torus;
 use rand::{Rand, Rng};
@@ -160,30 +160,17 @@ enum Command {
     Left, Right, Move, Skip
 }
 
-impl AstNode for Command {
-    fn node_type(&self) -> usize { 0 }
-
-    fn children(&self) -> Vec<&AstNode> {
-        vec![]
-    }
-
-    fn replace_child(&self, _: &AstNode, _: &mut Option<Box<AstNode>>) -> Box<AstNode> {
-        Box::new(self.clone())
-    }
-}
-
-fn random_command(rng: &mut Rng) -> Command {
-    pick![rng,
-        1, Command::Left,
-        1, Command::Right,
-        1, Command::Move,
-        1, Command::Skip
-        ]
-}
+impl_astnode!(Command, 0,
+              Left(), Right(), Move(), Skip());
 
 impl RandNode for Command {
     fn rand(rng: &mut Rng) -> Command {
-        random_command(rng)
+        pick![rng,
+            1, Command::Left,
+            1, Command::Right,
+            1, Command::Move,
+            1, Command::Skip
+            ]
     }
 }
 
@@ -195,34 +182,11 @@ enum Statement {
     Command(Box<Command>)
 }
 
-impl AstNode for Statement {
-    fn node_type(&self) -> usize { 1 }
-
-    fn children(&self) -> Vec<&AstNode> {
-        match *self {
-            Statement::IfFoodAhead(ref then, ref els) => vec![then.as_ref(), els.as_ref()],
-            Statement::Prog2(ref one, ref two) => vec![one.as_ref(), two.as_ref()],
-            Statement::Prog3(ref one, ref two, ref three) => vec![one.as_ref(), two.as_ref(), three.as_ref()],
-            Statement::Command(ref cmd) => vec![cmd.as_ref()]
-        }
-    }
-
-    fn replace_child(&self, old_child: &AstNode, new_child: &mut Option<Box<AstNode>>) -> Box<AstNode> {
-        Box::new(match *self {
-            Statement::IfFoodAhead(ref then, ref els) => Statement::IfFoodAhead(
-                clone_or_replace(then, old_child, new_child),
-                clone_or_replace(els, old_child, new_child)),
-            Statement::Prog2(ref one, ref two) => Statement::Prog2(
-                clone_or_replace(one, old_child, new_child),
-                clone_or_replace(two, old_child, new_child)),
-            Statement::Prog3(ref one, ref two, ref three) => Statement::Prog3(
-                clone_or_replace(one, old_child, new_child),
-                clone_or_replace(two, old_child, new_child),
-                clone_or_replace(three, old_child, new_child)),
-            Statement::Command(ref cmd) => Statement::Command(clone_or_replace(cmd, old_child, new_child))
-        })
-    }
-}
+impl_astnode!(Statement, 1,
+              IfFoodAhead(then, els),
+              Prog2(one, two),
+              Prog3(one, two, three),
+              Command(cmd));
 
 impl RandNode for Statement {
     fn rand(rng: &mut Rng) -> Statement {
