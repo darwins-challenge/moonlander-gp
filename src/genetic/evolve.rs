@@ -1,6 +1,6 @@
 use super::Fitness;
 use super::super::Population;
-use super::super::AstNode;
+use super::super::{AstNode, Mutatable};
 use super::crossover;
 use super::mutate;
 use rand::Rng;
@@ -13,7 +13,7 @@ pub struct Weights {
 
 /// Produce a new population of the same size based off the current one
 pub fn evolve<P, F, S, R: Rng>(pop: Population<P, F>, weights: &Weights, rng: &mut R, selector: S) -> Population<P, F>
-    where P: AstNode+Clone,
+    where P: AstNode+Clone+Mutatable,
           F: Fitness,
           S: for<'a> Fn(&'a Population<P, F>, &mut Rng) -> &'a P
 {

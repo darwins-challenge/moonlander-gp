@@ -12,7 +12,7 @@ extern crate log;
 mod pick;
 
 #[macro_use]
-mod node_gen;
+mod impl_astnode;
 
 mod ast;
 
