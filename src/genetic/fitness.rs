@@ -29,7 +29,8 @@ impl Fitness for SimpleFitness {
     fn score_card(&self) -> &ScoreCard { &self.score_card }
 }
 
-pub type Scores = Vec<(&'static str, Number)>;
+pub type Score = (&'static str, Number);
+pub type Scores = Vec<Score>;
 
 /// Immutable tagged list of scores
 ///
@@ -80,5 +81,75 @@ impl Ord for ScoreCard {
         if Number::is_nan(other.1) { return Ordering::Greater; }
 
         return self.1.partial_cmp(&other.1).unwrap();
+    }
+}
+
+fn find_rec<'a>(scores: &'a mut Scores, name: &'static str) -> Option<&'a mut Score> {
+    for x in scores.iter_mut() {
+        if x.0 == name {
+            return Some(x);
+        }
+    }
+    None
+}
+
+impl Add<ScoreCard> for ScoreCard {
+    type Output = ScoreCard;
+
+    fn add(self, rhs: ScoreCard) -> Self::Output {
+        let mut scores = self.0;
+        let mut total = self.1;
+
+        for (name, value) in rhs.0 {
+            let mut increased = false;
+            match find_rec(&mut scores, name) {
+                Some(rec) => { rec.1 += value; increased = true; },
+                None => { /* Moved outside match because borrow checker can't end scope early */ }
+            }
+            if !increased {
+                scores.push((name, value));
+            }
+            total += value;
+        }
+
+        ScoreCard(scores, total)
+    }
+}
+
+impl ::std::ops::Div<Number> for ScoreCard {
+    type Output = ScoreCard;
+
+    fn div(self, rhs: Number) -> Self::Output {
+        ScoreCard(
+            self.0.into_iter().map(|(n, v)| (n, v / rhs)).collect(),
+            self.1 / rhs
+        )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn add_scorecards_matching_keys() {
+        let one = ScoreCard::new(vec![("a", 1.0)]);
+        let two = ScoreCard::new(vec![("a", 1.0)]);
+
+        let added = one + two;
+
+        assert_eq!(vec![("a", 2.0)], added.0);
+        assert_eq!(2.0, added.total_score());
+    }
+
+    #[test]
+    fn add_scorecards_different_keys() {
+        let one = ScoreCard::new(vec![("a", 1.0)]);
+        let two = ScoreCard::new(vec![("b", 1.0)]);
+
+        let added = one + two;
+
+        assert_eq!(vec![("a", 1.0),("b", 1.0)], added.0);
+        assert_eq!(2.0, added.total_score());
     }
 }
