@@ -78,12 +78,12 @@ macro_rules! impl_astnode {
                 }
             }
 
-            fn replace_child(&self, old_child: &$crate::AstNode, new_child: &mut Option<Box<$crate::AstNode>>) -> Box<$crate::AstNode> {
+            fn replace_child(&self, _old_child: &$crate::AstNode, _new_child: &mut Option<Box<$crate::AstNode>>) -> Box<$crate::AstNode> {
                 Box::new(match *self {
                     $(
                         impl_astnode!(@reppat $enum_name $case_name($($fields),*))
                             =>
-                        impl_astnode!(@repcrea old_child new_child $enum_name $case_name($($fields),*))
+                        impl_astnode!(@repcrea _old_child _new_child $enum_name $case_name($($fields),*))
                     ),*
                 })
             }
