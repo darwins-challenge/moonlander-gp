@@ -42,6 +42,10 @@ pub fn torus(x: i32, n: i32) -> i32 {
     (x + k * n) % n
 }
 
+pub fn square(x: Number) -> Number {
+    x * x
+}
+
 #[cfg(test)]
 mod test {
     use super::*;

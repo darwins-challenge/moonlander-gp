@@ -96,23 +96,25 @@ fn find_rec<'a>(scores: &'a mut Scores, name: &'static str) -> Option<&'a mut Sc
 impl Add<ScoreCard> for ScoreCard {
     type Output = ScoreCard;
 
-    fn add(self, rhs: ScoreCard) -> Self::Output {
-        let mut scores = self.0;
-        let mut total = self.1;
+    fn add(mut self, rhs: ScoreCard) -> Self::Output {
+        self += &rhs;
+        self
+    }
+}
 
-        for (name, value) in rhs.0 {
+impl <'a> ::std::ops::AddAssign<&'a ScoreCard> for ScoreCard {
+    fn add_assign(&mut self, rhs: &'a ScoreCard) {
+        for &(name, value) in rhs.0.iter() {
             let mut increased = false;
-            match find_rec(&mut scores, name) {
+            match find_rec(&mut self.0, name) {
                 Some(rec) => { rec.1 += value; increased = true; },
                 None => { /* Moved outside match because borrow checker can't end scope early */ }
             }
             if !increased {
-                scores.push((name, value));
+                self.0.push((name, value));
             }
-            total += value;
+            self.1 += value;
         }
-
-        ScoreCard(scores, total)
     }
 }
 

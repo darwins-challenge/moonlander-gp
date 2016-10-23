@@ -1,4 +1,3 @@
-use downcast::Downcast;
 use downcast::Any;
 use std::rc::Rc;
 use rand::Rng;

@@ -16,6 +16,6 @@ pub use ast::{AstNode, Mutatable, RandNode, clone_or_replace, depth};
 pub mod num;
 
 pub mod genetic;
-pub use genetic::{ScoreCard};
+pub use genetic::{ScoreCard, Fitness};
 
 pub use num::Number;

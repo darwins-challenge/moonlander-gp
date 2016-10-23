@@ -13,7 +13,7 @@ extern crate rand;
 use moonlander_gp::{RandNode, Population, random_population};
 use moonlander_gp::genetic::{SimpleFitness, evolve, Weights, tournament_selection};
 use moonlander_gp::num::torus;
-use rand::{Rand, Rng};
+use rand::Rng;
 
 
 const POPULATION_SIZE : usize = 500;
