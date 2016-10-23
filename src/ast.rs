@@ -52,7 +52,7 @@ impl <T: RandNode+AstNode> Mutatable for T {
 // AST Operations
 
 pub fn depth(node: &AstNode) -> usize {
-    1 + node.children().into_iter().map(|c| depth(c)).max().unwrap()
+    1 + node.children().into_iter().map(|c| depth(c)).max().unwrap_or(0)
 }
 
 #[derive(Clone)]
@@ -210,5 +210,14 @@ mod tests {
         assert_eq!(&TestNode::Two(0,
             Box::new(TestNode::Leaf(1)),
             Box::new(TestNode::Leaf(3))), new_tree.downcast_ref::<TestNode>().unwrap());
+    }
+
+    #[test]
+    fn test_depth() {
+        let tree = TestNode::Two(0,
+            Box::new(TestNode::Leaf(1)),
+            Box::new(TestNode::Leaf(2)));
+
+        assert_eq!(2, depth(&tree));
     }
 }
