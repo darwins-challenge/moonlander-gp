@@ -13,8 +13,8 @@ pub struct Weights {
 
 /// Produce a new population of the same size based off the current one
 pub fn evolve<P, F, S, R: Rng>(pop: Population<P, F>, weights: &Weights, rng: &mut R, selector: S) -> Population<P, F>
-    where P: AstNode+Clone+Mutatable,
-          F: Fitness,
+    where P: AstNode+Clone+Mutatable+Sync,
+          F: Fitness+Send,
           S: for<'a> Fn(&'a Population<P, F>, &mut Rng) -> &'a P
 {
     let mut ret = Population::new(pop.n(), pop.generation + 1);

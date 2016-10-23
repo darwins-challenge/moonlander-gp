@@ -4,8 +4,8 @@ use super::super::AstNode;
 use super::super::Population;
 
 pub fn tournament_selection<'a, P, F>(tournament_size: usize, pop: &'a Population<P, F>, rng: &mut Rng) -> &'a P
-    where P: AstNode+Clone,
-          F: Fitness
+    where P: AstNode+Clone+Sync,
+          F: Fitness+Send
 {
     // Generate N random indexes. Slightly faster than rand::sample(), don't care about
     // the inaccuracy introduced by sampling with replacement.

@@ -8,7 +8,7 @@ use std::ops::Add;
 /// evaluation if you want to.
 ///
 /// Provides some helper classes to record scores.
-pub trait Fitness {
+pub trait Fitness: Send {
     fn score_card(&self) -> &ScoreCard;
 }
 

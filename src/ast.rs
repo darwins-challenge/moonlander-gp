@@ -5,7 +5,7 @@ use rand::Rng;
 //----------------------------------------------------------------------
 // AST Traits
 
-pub trait AstNode: Any+Mutatable+Copyable {
+pub trait AstNode: Any+Mutatable+Copyable+Sync {
     /// Identify the node type, because we can't use get_type_id().
     fn node_type(&self) -> usize;
 
