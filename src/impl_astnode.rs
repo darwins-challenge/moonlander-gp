@@ -15,7 +15,7 @@
 /// }
 ///
 /// # impl ::moonlander_gp::RandNode for Tree {
-/// #     fn rand(_: &mut ::rand::Rng) -> Tree {
+/// #     fn rand(_: ::moonlander_gp::TargetHeight, _: &mut ::rand::Rng) -> Tree {
 /// #         Tree::Leaf(0)
 /// #     }
 /// # }
@@ -94,6 +94,7 @@ macro_rules! impl_astnode {
 #[cfg(test)]
 mod tests {
     use super::super::ast::*;
+    use super::super::random_pop::*;
 
     #[derive(Clone,PartialEq,Eq,Debug)]
     enum Tree {
@@ -106,7 +107,7 @@ mod tests {
                   Node(left, right));
 
     impl RandNode for Tree {
-        fn rand(_: &mut ::rand::Rng) -> Tree {
+        fn rand(_: TargetHeight, _: &mut ::rand::Rng) -> Tree {
             Tree::Leaf(0)
         }
     }

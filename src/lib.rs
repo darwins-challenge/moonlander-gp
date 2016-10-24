@@ -8,11 +8,14 @@ extern crate rayon;
 #[macro_use] mod impl_astnode;
 
 mod ast;
+pub use ast::{AstNode, Mutatable, clone_or_replace, depth};
 
 mod population;
-pub use self::population::{Population, random_population};
+pub use self::population::Population;
 
-pub use ast::{AstNode, Mutatable, RandNode, clone_or_replace, depth};
+mod random_pop;
+pub use self::random_pop::{random_population, RandNode, TargetHeight};
+
 pub mod num;
 
 pub mod genetic;

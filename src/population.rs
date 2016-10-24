@@ -1,6 +1,6 @@
 use super::genetic::Fitness;
 use rand::Rng;
-use super::{RandNode, Number};
+use super::Number;
 use super::num::{sum, partial_max};
 use rayon::prelude::*;
 
@@ -38,7 +38,7 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
     }
 
     /// Apply a scoring function to the entire population
-    pub fn score<S>(&mut self, scoring_fn: S, rng: &mut Rng)
+    pub fn score<S>(&mut self, scoring_fn: S, _: &mut Rng)
         where S: Fn(&P, &mut Rng) -> F + Sync
     {
         self.population.par_iter().weight_max().map(|p| scoring_fn(p, &mut ::rand::thread_rng())).collect_into(&mut self.scores);
@@ -54,11 +54,3 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
     }
 }
 
-/// Generate a random population of size n
-pub fn random_population<P: RandNode+Clone+Sync, F: Fitness+Sized+Send, R: Rng>(n: usize, rng: &mut R) -> Population<P, F> {
-    let mut ret = Population::new(n, 0);
-    for _ in 0..n {
-        ret.add(P::rand(rng));
-    }
-    ret
-}

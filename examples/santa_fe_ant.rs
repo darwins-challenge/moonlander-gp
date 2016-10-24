@@ -10,7 +10,7 @@
 extern crate moonlander_gp;
 extern crate rand;
 
-use moonlander_gp::{RandNode, Population, random_population};
+use moonlander_gp::{RandNode, Population, random_population, TargetHeight};
 use moonlander_gp::genetic::{SimpleFitness, evolve, Weights, tournament_selection};
 use moonlander_gp::num::torus;
 use rand::Rng;
@@ -164,12 +164,12 @@ impl_astnode!(Command, 0,
               Left(), Right(), Move(), Skip());
 
 impl RandNode for Command {
-    fn rand(rng: &mut Rng) -> Command {
+    fn rand(weights: TargetHeight, rng: &mut Rng) -> Command {
         pick![rng,
-            1, Command::Left,
-            1, Command::Right,
-            1, Command::Move,
-            1, Command::Skip
+            weights.leaf(), Command::Left,
+            weights.leaf(), Command::Right,
+            weights.leaf(), Command::Move,
+            weights.leaf(), Command::Skip
             ]
     }
 }
@@ -189,12 +189,12 @@ impl_astnode!(Statement, 1,
               Command(cmd));
 
 impl RandNode for Statement {
-    fn rand(rng: &mut Rng) -> Statement {
+    fn rand(weights: TargetHeight, rng: &mut Rng) -> Statement {
         pick![rng,
-            1, Statement::IfFoodAhead(Box::new(Statement::rand(rng)), Box::new(Statement::rand(rng))),
-            1, Statement::Prog2(Box::new(Statement::rand(rng)), Box::new(Statement::rand(rng))),
-            1, Statement::Prog3(Box::new(Statement::rand(rng)), Box::new(Statement::rand(rng)), Box::new(Statement::rand(rng))),
-            5, Statement::Command(Box::new(Command::rand(rng)))
+            weights.internal(), Statement::IfFoodAhead(weights.gen_child(rng), weights.gen_child(rng)),
+            weights.internal(), Statement::Prog2(weights.gen_child(rng), weights.gen_child(rng)),
+            weights.internal(), Statement::Prog3(weights.gen_child(rng), weights.gen_child(rng), weights.gen_child(rng)),
+            weights.leaf(), Statement::Command(weights.gen_child(rng))
             ]
     }
 }

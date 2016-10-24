@@ -33,21 +33,6 @@ impl <T: Clone+AstNode> Copyable for T {
     fn copy(&self) -> Box<AstNode> { Box::new(self.clone()) }
 }
 
-/// A trait like rand::Rand, but one that doesn't require that the Rng instance is Sized,
-/// so that we can combine it with the Mutatable trait.
-///
-/// We also will encode relative weights for tree depth into here. If the node has a choice
-/// between generating an internal node or a leaf node, it should use these weights.
-pub trait RandNode: Sized {
-    fn rand(rng: &mut Rng) -> Self;
-}
-
-impl <T: RandNode+AstNode> Mutatable for T {
-    fn mutate(&self, rng: &mut Rng) -> Box<AstNode> {
-        Box::new(T::rand(rng))
-    }
-}
-
 //----------------------------------------------------------------------
 // AST Operations
 
