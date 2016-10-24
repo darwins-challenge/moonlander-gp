@@ -14,18 +14,12 @@
 ///     Node(Box<Tree>, Box<Tree>)
 /// }
 ///
-/// # impl ::moonlander_gp::RandNode for Tree {
-/// #     fn rand(_: ::moonlander_gp::TargetHeight, _: &mut ::rand::Rng) -> Tree {
-/// #         Tree::Leaf(0)
-/// #     }
-/// # }
-///
 /// // Notice sub-trees are indicated by a name, but data fields are
 /// // indicated by (data name).
 ///
 /// impl_astnode!(Tree, 666,
-///               Leaf((data value)),
-///               Node(left, right));
+///               leaf Leaf((data value |rng: &mut ::rand::Rng| (rng.next_u32() % 100) as i32)),
+///               int Node(left, right));
 ///
 /// # fn main() { }
 /// ```
@@ -33,12 +27,12 @@
 macro_rules! impl_astnode {
     (@asref $i:ident) => { $i.as_ref() };
     // Field matchers for returning children
-    (@retcap (data $i:ident)) => { _ };
+    (@retcap (data $i:ident $($gen:expr)*)) => { _ };
     (@retcap $i:ident) => { ref $i };
 
     // Make vector for all non-data fields
     (@mkvec () ($($acc:expr)*)) => { vec![$($acc),*] };
-    (@mkvec ((data $field:ident) $($fields:tt)*) ($($acc:tt)*)) => {
+    (@mkvec ((data $field:ident $($gen:expr)*) $($fields:tt)*) ($($acc:tt)*)) => {
         impl_astnode!(@mkvec ($($fields)*) ($($acc)*))
     };
     (@mkvec ($field:ident $($fields:tt)*) ($($acc:tt)*)) => {
@@ -51,9 +45,9 @@ macro_rules! impl_astnode {
     (@retcrea $enum_name:ident $case_name:ident ($($fields:tt),*)) => { impl_astnode!(@mkvec ($($fields)*) ()) };
 
     // Field matchers for replacing children
-    (@repcap (data $i:ident)) => { ref $i };
+    (@repcap (data $i:ident $($gen:expr)*)) => { ref $i };
     (@repcap $i:ident) => { ref $i };
-    (@repret $old_child:ident $new_child:ident (data $i:ident)) => { $i.clone() };
+    (@repret $old_child:ident $new_child:ident (data $i:ident $($gen:expr)*)) => { $i.clone() };
     (@repret $old_child:ident $new_child:ident $i:ident) => { $crate::clone_or_replace($i, $old_child, $new_child) };
 
     // Matching pattern for replacing children, for enum variants with and without parameters
@@ -64,7 +58,22 @@ macro_rules! impl_astnode {
     (@repcrea $old_child:ident $new_child:ident $enum_name:ident $case_name:ident ()) => { $enum_name::$case_name };
     (@repcrea $old_child:ident $new_child:ident $enum_name:ident $case_name:ident ($($fields:tt),+)) => { $enum_name::$case_name($( impl_astnode!(@repret $old_child $new_child $fields) ),+) };
 
-    ($enum_name:ident, $type_id:expr, $( $case_name:ident ($($fields:tt),*) ),* ) => {
+    // Constructor call, for random variants with and without parameters
+    (@randcrea $weights:ident $rng:ident $enum_name:ident $case_name:ident ()) => { $enum_name::$case_name };
+    (@randcrea $weights:ident $rng:ident $enum_name:ident $case_name:ident ($($fields:tt),+)) => {
+        $enum_name::$case_name($( impl_astnode!(@randchild $weights $rng $fields) ),+)
+    };
+
+    // Details for RandNode implementation
+    (@callgen $rng:ident) => { "You should pass a random-generating function to a 'data' field" };
+    (@callgen $rng:ident $gen:expr) => { $gen($rng) };
+    (@randchild $weights:ident $rng:ident (data $field:ident $($gen:expr)*)) => { impl_astnode!(@callgen $rng $($gen)*) };
+    (@randchild $weights:ident $rng:ident $field:ident) => { $weights.gen_child($rng) };
+    (@weight leaf $weights:expr) => { $weights.leaf() };
+    (@weight int $weights:expr) => { $weights.internal() };
+
+    // Entry point
+    ($enum_name:ident, $type_id:expr, $( $case_type:ident $case_name:ident ($($fields:tt),*) ),* ) => {
         impl $crate::AstNode for $enum_name {
             fn node_type(&self) -> usize { $type_id }
 
@@ -88,6 +97,17 @@ macro_rules! impl_astnode {
                 })
             }
         }
+
+        impl $crate::RandNode for $enum_name {
+            fn rand(weights: $crate::TargetHeight, rng: &mut ::rand::Rng) -> $enum_name {
+                pick![rng,
+                    $(
+                        impl_astnode!(@weight $case_type weights),
+                        impl_astnode!(@randcrea weights rng $enum_name $case_name( $( $fields ),* ))
+                    ),*
+                    ]
+            }
+        }
     };
 }
 
@@ -103,13 +123,11 @@ mod tests {
     }
 
     impl_astnode!(Tree, 666,
-                  Leaf((data d)),
-                  Node(left, right));
+                  leaf Leaf((data d |rng: &mut ::rand::Rng| (rng.next_u32() % 100) as i32)),
+                  int Node(left, right));
 
-    impl RandNode for Tree {
-        fn rand(_: TargetHeight, _: &mut ::rand::Rng) -> Tree {
-            Tree::Leaf(0)
-        }
+    impl RandValue for i32 {
+        fn rand(rng: &mut ::rand::Rng) -> i32 { (rng.next_u32() % 100) as i32 }
     }
 
     #[test]

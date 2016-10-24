@@ -5,7 +5,7 @@ extern crate rayon;
 #[macro_use] extern crate log;
 
 #[macro_use] mod pick;
-#[macro_use] mod impl_astnode;
+#[macro_use] pub mod impl_astnode;
 
 mod ast;
 pub use ast::{AstNode, Mutatable, clone_or_replace, depth};
@@ -14,7 +14,7 @@ mod population;
 pub use self::population::Population;
 
 mod random_pop;
-pub use self::random_pop::{random_population, RandNode, TargetHeight};
+pub use self::random_pop::{random_population, RandNode, RandValue, TargetHeight};
 
 pub mod num;
 

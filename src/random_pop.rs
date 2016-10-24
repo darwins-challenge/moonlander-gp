@@ -13,6 +13,11 @@ pub trait RandNode: Sized {
     fn rand(weights: TargetHeight, rng: &mut Rng) -> Self;
 }
 
+/// Random value, takes unsized Rng for use in data values
+pub trait RandValue: Sized {
+    fn rand(rng: &mut Rng) -> Self;
+}
+
 impl <T: RandNode+AstNode> Mutatable for T {
     fn mutate(&self, rng: &mut Rng) -> Box<AstNode> {
         Box::new(T::rand(TargetHeight::randomized(4, rng), rng))

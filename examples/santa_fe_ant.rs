@@ -10,7 +10,7 @@
 extern crate moonlander_gp;
 extern crate rand;
 
-use moonlander_gp::{RandNode, Population, random_population, TargetHeight};
+use moonlander_gp::{Population, random_population};
 use moonlander_gp::genetic::{SimpleFitness, evolve, Weights, tournament_selection};
 use moonlander_gp::num::torus;
 use rand::Rng;
@@ -161,18 +161,7 @@ enum Command {
 }
 
 impl_astnode!(Command, 0,
-              Left(), Right(), Move(), Skip());
-
-impl RandNode for Command {
-    fn rand(weights: TargetHeight, rng: &mut Rng) -> Command {
-        pick![rng,
-            weights.leaf(), Command::Left,
-            weights.leaf(), Command::Right,
-            weights.leaf(), Command::Move,
-            weights.leaf(), Command::Skip
-            ]
-    }
-}
+              int Left(), int Right(), int Move(), int Skip());
 
 #[derive(Clone)]
 enum Statement {
@@ -183,21 +172,10 @@ enum Statement {
 }
 
 impl_astnode!(Statement, 1,
-              IfFoodAhead(then, els),
-              Prog2(one, two),
-              Prog3(one, two, three),
-              Command(cmd));
-
-impl RandNode for Statement {
-    fn rand(weights: TargetHeight, rng: &mut Rng) -> Statement {
-        pick![rng,
-            weights.internal(), Statement::IfFoodAhead(weights.gen_child(rng), weights.gen_child(rng)),
-            weights.internal(), Statement::Prog2(weights.gen_child(rng), weights.gen_child(rng)),
-            weights.internal(), Statement::Prog3(weights.gen_child(rng), weights.gen_child(rng), weights.gen_child(rng)),
-            weights.leaf(), Statement::Command(weights.gen_child(rng))
-            ]
-    }
-}
+              int IfFoodAhead(then, els),
+              int Prog2(one, two),
+              int Prog3(one, two, three),
+              leaf Command(cmd));
 
 //----------------------------------------------------------------------
 // THE BOARD
