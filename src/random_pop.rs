@@ -2,8 +2,6 @@ use std::cmp::max;
 use super::{AstNode, Population, Fitness, Mutatable};
 use rand::Rng;
 
-const RANDOMPOP_MAX_HEIGHT : usize = 6;
-
 /// A trait like rand::Rand, but one that doesn't require that the Rng instance is Sized,
 /// so that we can combine it with the Mutatable trait.
 ///
@@ -26,10 +24,10 @@ impl <T: RandNode+AstNode> Mutatable for T {
 
 
 /// Generate a random population of size n
-pub fn random_population<P: RandNode+Clone+Sync, F: Fitness+Sized+Send, R: Rng>(n: usize, rng: &mut R) -> Population<P, F> {
+pub fn random_population<P: RandNode+Clone+Sync, F: Fitness+Sized+Send, R: Rng>(n: usize, max_depth: usize, rng: &mut R) -> Population<P, F> {
     let mut ret = Population::new(n, 0);
     for i in 0..n {
-        let height = 1 + i / (n / RANDOMPOP_MAX_HEIGHT);
+        let height = 1 + i / (n / max_depth);
         ret.add(P::rand(TargetHeight::fixed(height as i32), rng));
     }
     ret

@@ -20,6 +20,7 @@ const POPULATION_SIZE : usize = 500;
 const MAX_TIME : usize = 600;
 const NR_GENERATIONS : usize = 50;
 const TOURNAMENT_SIZE : usize = 10;
+const MAX_DEPTH : usize = 8;
 
 
 type AntPopulation = Population<Statement, SimpleFitness>;
@@ -33,7 +34,7 @@ fn main() {
         crossover: 70
     };
 
-    let mut pop : AntPopulation = random_population(POPULATION_SIZE, &mut rng);
+    let mut pop : AntPopulation = random_population(POPULATION_SIZE, MAX_DEPTH, &mut rng);
     for gen in 0..NR_GENERATIONS {
         pop.score(score_ant, &mut rng);
         println!("Generation {}, best {}, average {}", gen, pop.best_score(), pop.avg_score());

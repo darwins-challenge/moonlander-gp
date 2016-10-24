@@ -3,6 +3,8 @@ use rand::Rng;
 use super::Number;
 use super::num::{sum, partial_max};
 use rayon::prelude::*;
+use rustc_serialize::Encodable;
+
 
 /// A population with the root of the indicated type
 pub struct Population<P: Clone+Sync, F: Fitness+Sized+Send> {
@@ -52,5 +54,21 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
     pub fn best_score(&self) -> Number {
         partial_max(self.scores.iter().map(|f| f.score_card().total_score())).unwrap()
     }
+
+    /// Return the best program from the population
+    pub fn champion<'a>(&'a self) -> CreatureScore<'a, P, F>
+        where P: Encodable, F: Encodable
+    {
+        let indexes = 0..self.n();
+        let winner_i = indexes.into_iter().max_by_key(|i| self.scores[*i].score_card()).unwrap();
+        CreatureScore { program: &self.population[winner_i], fitness: &self.scores[winner_i] }
+    }
 }
 
+#[derive(RustcEncodable)]
+pub struct CreatureScore<'a, P: 'a, F: 'a>
+    where P: Encodable, F: Encodable
+{
+    pub program: &'a P,
+    pub fitness: &'a F
+}
