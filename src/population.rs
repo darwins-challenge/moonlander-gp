@@ -61,7 +61,11 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
     {
         let indexes = 0..self.n();
         let winner_i = indexes.into_iter().max_by_key(|i| self.scores[*i].score_card()).unwrap();
-        CreatureScore { program: &self.population[winner_i], fitness: &self.scores[winner_i] }
+        CreatureScore {
+            generation: self.generation,
+            program: &self.population[winner_i],
+            fitness: &self.scores[winner_i]
+        }
     }
 }
 
@@ -69,6 +73,7 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
 pub struct CreatureScore<'a, P: 'a, F: 'a>
     where P: Encodable, F: Encodable
 {
+    pub generation: u32,
     pub program: &'a P,
     pub fitness: &'a F
 }
