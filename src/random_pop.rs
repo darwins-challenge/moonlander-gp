@@ -43,6 +43,7 @@ pub fn retain_best<P, F, R>(frac: Number, pop: Population<P, F>, max_depth: usiz
     let n = (pop.n() as Number * frac) as usize;
     let filler = pop.n() - n;
     let mut ret = Population::new(n, 0);
+    ret.generation = pop.generation + 1;
 
     for c in pop.best_n(n) {
         ret.add(c);
