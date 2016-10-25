@@ -57,6 +57,10 @@ impl ScoreCard {
     pub fn total_score(&self) -> Number {
         self.1
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.len() == 0
+    }
 }
 
 impl PartialEq for ScoreCard {
