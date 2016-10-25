@@ -67,6 +67,14 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
             fitness: &self.scores[winner_i]
         }
     }
+
+    /// Return the best N programs from the population
+    pub fn best_n<'a>(&self, n: usize) -> Vec<P>
+    {
+        let mut indexes : Vec<usize> = (0..self.n()).collect();
+        indexes.sort_by_key(|i| self.scores[*i].score_card());
+        indexes[indexes.len() - n..].into_iter().map(|i| self.population[*i].clone()).collect()
+    }
 }
 
 #[derive(RustcEncodable)]

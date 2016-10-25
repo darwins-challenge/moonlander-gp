@@ -1,6 +1,7 @@
 use std::cmp::max;
-use super::{AstNode, Population, Fitness, Mutatable};
+use super::{AstNode, Population, Fitness, Mutatable, Number};
 use rand::Rng;
+use rustc_serialize::Encodable;
 
 /// A trait like rand::Rand, but one that doesn't require that the Rng instance is Sized,
 /// so that we can combine it with the Mutatable trait.
@@ -17,8 +18,8 @@ pub trait RandValue: Sized {
 }
 
 impl <T: RandNode+AstNode> Mutatable for T {
-    fn mutate(&self, rng: &mut Rng) -> Box<AstNode> {
-        Box::new(T::rand(TargetHeight::randomized(4, rng), rng))
+    fn mutate(&self, max_height: i32, rng: &mut Rng) -> Box<AstNode> {
+        Box::new(T::rand(TargetHeight::fixed(max_height), rng))
     }
 }
 
@@ -28,6 +29,27 @@ pub fn random_population<P: RandNode+Clone+Sync, F: Fitness+Sized+Send, R: Rng>(
     let mut ret = Population::new(n, 0);
     for i in 0..n {
         let height = 1 + i / (n / max_depth);
+        ret.add(P::rand(TargetHeight::fixed(height as i32), rng));
+    }
+    ret
+}
+
+/// Take the best X fraction of the population and fill up with random programs
+pub fn retain_best<P, F, R>(frac: Number, pop: Population<P, F>, max_depth: usize, rng: &mut R) -> Population<P, F>
+    where P: RandNode+Clone+Sync+Encodable,
+          F: Fitness+Sized+Send+Encodable,
+          R: Rng
+{
+    let n = (pop.n() as Number * frac) as usize;
+    let filler = pop.n() - n;
+    let mut ret = Population::new(n, 0);
+
+    for c in pop.best_n(n) {
+        ret.add(c);
+    }
+
+    for i in 0..filler {
+        let height = 1 + i / (filler / max_depth);
         ret.add(P::rand(TargetHeight::fixed(height as i32), rng));
     }
     ret
@@ -43,7 +65,7 @@ impl TargetHeight {
     pub fn fixed(target_height: i32) -> TargetHeight {
         TargetHeight {
             current_level: 0,
-            per_level: 100 / max(target_height, 1)
+            per_level: 100 / max(target_height - 1, 1)
         }
     }
 

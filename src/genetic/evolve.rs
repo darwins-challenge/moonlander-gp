@@ -8,7 +8,8 @@ use rand::Rng;
 pub struct Weights {
     pub reproduce: u32,
     pub mutate: u32,
-    pub crossover: u32
+    pub crossover: u32,
+    pub tree_height: i32
 }
 
 /// Produce a new population of the same size based off the current one
@@ -26,7 +27,8 @@ pub fn evolve<P, F, S, R: Rng>(pop: Population<P, F>, weights: &Weights, rng: &m
             },
             weights.mutate, {
                 let winner = selector(&pop, rng);
-                let mutation = mutate::mutate_tree(winner, rng);
+                let target_height = rng.next_u32() as i32 % weights.tree_height;
+                let mutation = mutate::mutate_tree(winner, target_height, rng);
                 ret.add(*mutation);
             },
             weights.crossover, {

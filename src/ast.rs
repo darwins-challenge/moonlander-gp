@@ -20,7 +20,7 @@ downcast_methods!(AstNode);
 
 pub trait Mutatable {
     /// Return a mutation of this node
-    fn mutate(&self, rng: &mut Rng) -> Box<AstNode>;
+    fn mutate(&self, max_height: i32, rng: &mut Rng) -> Box<AstNode>;
 }
 
 pub trait Copyable {
@@ -148,7 +148,7 @@ mod tests {
     }
 
     impl Mutatable for TestNode {
-        fn mutate(&self, _: &mut Rng) -> Box<AstNode> {
+        fn mutate(&self, _: i32, _: &mut Rng) -> Box<AstNode> {
             Box::new(self.clone())
         }
     }

@@ -31,7 +31,8 @@ fn main() {
     let weights = Weights {
         reproduce: 10,
         mutate: 20,
-        crossover: 70
+        crossover: 70,
+        tree_height: MAX_DEPTH as i32
     };
 
     let mut pop : AntPopulation = random_population(POPULATION_SIZE, MAX_DEPTH, &mut rng);
