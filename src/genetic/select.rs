@@ -3,6 +3,7 @@ use super::fitness::Fitness;
 use super::super::AstNode;
 use super::super::Population;
 
+/// Return the winner from a tournament of size N, randomly picked from the scored population.
 pub fn tournament_selection<'a, P, F>(tournament_size: usize, pop: &'a Population<P, F>, rng: &mut Rng) -> &'a P
     where P: AstNode+Clone+Sync,
           F: Fitness+Send

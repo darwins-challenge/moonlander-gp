@@ -14,7 +14,7 @@ mod population;
 pub use self::population::Population;
 
 mod random_pop;
-pub use self::random_pop::{random_population, RandNode, RandValue, TargetHeight, retain_best};
+pub use self::random_pop::{random_population, RandNode, NodeWeights, retain_best};
 
 pub mod num;
 

@@ -1,10 +1,11 @@
+//! Genetic operation functions
 mod mutate;
 pub use self::mutate::mutate_tree;
 
 mod crossover;
 pub use self::crossover::crossover_tree;
 
-pub mod fitness;
+mod fitness;
 pub use self::fitness::{Fitness, SimpleFitness, ScoreCard, Scores};
 
 mod select;

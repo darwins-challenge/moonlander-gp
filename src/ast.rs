@@ -5,24 +5,39 @@ use rand::Rng;
 //----------------------------------------------------------------------
 // AST Traits
 
+/// Main trait to be implemented for AST node types
 pub trait AstNode: Any+Mutatable+Copyable+Sync {
-    /// Identify the node type, because we can't use get_type_id().
+    /// Identify the node type, because Any::get_type_id() is unstable.
     fn node_type(&self) -> usize;
 
-    /// Return all children of this node
+    /// Return all children of this node.
     fn children(&self) -> Vec<&AstNode>;
 
+    /// Return a copy of this node with a single child node replaced.
     fn replace_child(&self, old_child: &AstNode, new_child: &mut Option<Box<AstNode>>) -> Box<AstNode>;
 }
 
 impl_downcast!(AstNode);
 downcast_methods!(AstNode);
 
+/// Mutation trait for nodes
+///
+/// Implement this if you want to do controlled mutation of nodes.  For example,
+/// changing the node type without changing the children, or changing the number
+/// value in a controlled way.
+///
+/// When not explicitly specified, a default implementation is provided for
+/// nodes that also implement `RandNode`, which completely replaces the node
+/// with a random subtree.
 pub trait Mutatable {
     /// Return a mutation of this node
     fn mutate(&self, max_height: i32, rng: &mut Rng) -> Box<AstNode>;
 }
 
+/// Like `Clone`, but can be called on a trait object.
+///
+/// Used during crossover. Automatically implemented for every type that is also
+/// `Clone`.
 pub trait Copyable {
     /// Like clone(), but unsized. Necessary during crossover.
     fn copy(&self) -> Box<AstNode>;
@@ -36,16 +51,20 @@ impl <T: Clone+AstNode> Copyable for T {
 //----------------------------------------------------------------------
 // AST Operations
 
+/// Return the depth of an AST tree.
 pub fn depth(node: &AstNode) -> usize {
     1 + node.children().into_iter().map(|c| depth(c)).max().unwrap_or(0)
 }
 
+/// A zipper-like structure pointing to a tree node, so a modified copy of the
+/// tree can be reconstructed.
 #[derive(Clone)]
 pub struct NodeInTree<'a> {
     pub node: &'a AstNode,
     pub root_path: Option<Rc<NodeInTree<'a>>>
 }
 
+/// Return all nodes in a given AST tree.
 pub fn find_nodes_and_parents<'a>(root: &'a AstNode) -> Vec<Rc<NodeInTree<'a>>> {
     let mut result: Vec<Rc<NodeInTree<'a>>> = vec![];
     result.reserve(100);  // Skip some resizes we have to do on medium-sized trees
@@ -82,10 +101,10 @@ fn same_node<T: AstNode>(node1: &T, node2: &AstNode) -> bool {
     }
 }
 
-/// Helper function for use inside replace_children()
+/// Helper function for use inside `replace_children()`.
 ///
-/// Call this for every child node in replace_children(). The new_child is a
-/// &mut Option<> so that we can be sure we consume it exactly once.
+/// Call this for every child node in `replace_children()`. The new_child is a
+/// `&mut Option<>` so that we can be sure we consume it exactly once.
 pub fn clone_or_replace<T: AstNode+Clone>(child: &T, old_child: &AstNode, new_child: &mut Option<Box<AstNode>>) -> Box<T> {
     if same_node(child, old_child) {
         new_child.take().unwrap().downcast::<T>().ok().unwrap()
@@ -94,6 +113,7 @@ pub fn clone_or_replace<T: AstNode+Clone>(child: &T, old_child: &AstNode, new_ch
     }
 }
 
+/// Return a copy of the entire tree, replacing the indicated node with another.
 pub fn replace_to_root<T: AstNode>(nap: &Rc<NodeInTree>, new_child: Box<AstNode>) -> Box<T> {
     let mut new_child_opt = Some(new_child);
     do_replace_to_root(nap, &mut new_child_opt)

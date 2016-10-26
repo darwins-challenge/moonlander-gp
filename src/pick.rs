@@ -1,9 +1,6 @@
-//! pick an expression according to weights
-
 extern crate rand;
 
-/// The `pick` macro allows to randomly select one expression from a sequence of
-/// expressions according to associated weights.
+/// Randomly pick from a weighted list of alternatives.
 #[macro_export]
 macro_rules! pick {
     ($rng: expr, $( $weight: expr, $expression: expr),+) => {{

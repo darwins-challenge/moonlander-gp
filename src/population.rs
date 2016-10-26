@@ -6,7 +6,10 @@ use rayon::prelude::*;
 use rustc_serialize::Encodable;
 
 
-/// A population with the root of the indicated type
+/// Collection of programs
+///
+/// The root of each program is of type `P`, and fitness structures will be
+/// represented by type `F`.
 pub struct Population<P: Clone+Sync, F: Fitness+Sized+Send> {
     /// Collection of algorithms
     pub population: Vec<P>,
@@ -19,7 +22,7 @@ pub struct Population<P: Clone+Sync, F: Fitness+Sized+Send> {
 }
 
 impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
-    /// Create a new population with an estimated size
+    /// Create a new population with an estimated size.
     ///
     /// This does not create programs yet but simply allocates memory.
     pub fn new(n: usize, generation: u32) -> Population<P, F> {
@@ -30,7 +33,7 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
         }
     }
 
-    /// Add a single program to the population
+    /// Add a single program to the population.
     pub fn add(&mut self, program: P) {
         self.population.push(program);
     }
@@ -39,7 +42,7 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
         self.population.len()
     }
 
-    /// Apply a scoring function to the entire population
+    /// Apply a scoring function to the entire population.
     pub fn score<S>(&mut self, scoring_fn: S, _: &mut Rng)
         where S: Fn(&P, &mut Rng) -> F + Sync
     {
@@ -55,7 +58,7 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
         partial_max(self.scores.iter().map(|f| f.score_card().total_score())).unwrap()
     }
 
-    /// Return the best program from the population
+    /// Return the best program from the population.
     pub fn champion<'a>(&'a self) -> CreatureScore<'a, P, F>
         where P: Encodable, F: Encodable
     {
@@ -68,7 +71,7 @@ impl <P: Clone+Sync, F: Fitness+Sized+Send> Population<P, F> {
         }
     }
 
-    /// Return the best N programs from the population
+    /// Return the best N programs from the population.
     pub fn best_n<'a>(&self, n: usize) -> Vec<P>
     {
         let mut indexes : Vec<usize> = (0..self.n()).collect();

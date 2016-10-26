@@ -5,6 +5,7 @@ use super::crossover;
 use super::mutate;
 use rand::Rng;
 
+/// Parameters to the `evolve` function.
 pub struct Weights {
     pub reproduce: u32,
     pub mutate: u32,
@@ -12,7 +13,11 @@ pub struct Weights {
     pub tree_height: i32
 }
 
-/// Produce a new population of the same size based off the current one
+/// Evolve an old generation into a new generation.
+///
+/// Uses the parameters in the `Weights` structure and the selection algorithm
+/// to pick and evolve individuals from the given population into a new
+/// one.
 pub fn evolve<P, F, S, R: Rng>(pop: Population<P, F>, weights: &Weights, rng: &mut R, selector: S) -> Population<P, F>
     where P: AstNode+Clone+Mutatable+Sync,
           F: Fitness+Send,

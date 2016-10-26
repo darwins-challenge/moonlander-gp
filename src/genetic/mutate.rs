@@ -6,7 +6,10 @@ use super::super::AstNode;
 use super::super::ast::{replace_to_root, find_nodes_and_parents, NodeInTree};
 
 
-/// Pick a node at random to mutate
+/// Mutate a random node.
+///
+/// Pick a subtree at random, call `mutate()` on it, and return a new
+/// tree with the subtree replaced.
 pub fn mutate_tree<T: AstNode+Clone, R: rand::Rng+Sized>(ast: &T, target_height: i32, rng: &mut R) -> Box<T> {
     let naps = find_nodes_and_parents(ast);
     let picked = rng.choose(&naps).unwrap();

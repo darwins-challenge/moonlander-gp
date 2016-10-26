@@ -8,7 +8,10 @@ use rand;
 use super::super::{AstNode, Mutatable};
 use super::super::ast::{NodeInTree, find_nodes_and_parents, replace_to_root};
 
-/// Pick two random nodes and cross them over
+/// Cross two trees.
+///
+/// Pick two random subtrees of the same type in both trees, and return two new
+/// trees with the subtrees switched.
 pub fn crossover_tree<T: AstNode+Mutatable+Clone, R: rand::Rng+Sized>(ast1: &T, ast2: &T, rng: &mut R) -> (Box<T>, Box<T>) {
     let nodes1 = group_by_type(find_nodes_and_parents(ast1));
     let nodes2 = group_by_type(find_nodes_and_parents(ast2));

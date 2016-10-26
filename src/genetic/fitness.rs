@@ -30,11 +30,25 @@ impl Fitness for SimpleFitness {
 }
 
 pub type Score = (&'static str, Number);
+
+/// List of tuples of a score label and a score value.
 pub type Scores = Vec<Score>;
 
-/// Immutable tagged list of scores
+/// Immutable tagged list of scores.
 ///
-/// Retains the total as a separate field
+/// The final score of an individual can be composed of many labeled subscores
+/// (for manual evaluation later on). Pass the scoresas a list of tuples with a
+/// static string and a score. The final score is the total of all subscores.
+///
+/// Example:
+///
+/// ```
+/// # use moonlander_gp::ScoreCard;
+/// let score = ScoreCard::new(vec![
+///     ("food", 10.0),
+///     ("thirst", -5.0)
+/// ]);
+/// ```
 #[derive(Clone,RustcEncodable)]
 pub struct ScoreCard(Scores, Number);
 

@@ -1,6 +1,8 @@
-/// Macro to implement the AstNode trait
+/// Implement AstNode and RandNode trait for a node type.
 ///
-/// It's a bit of a bother, so this macro does it for you.
+/// Implementing this code for the various variants of an enum
+/// is a bit of a bother and quite repetitive, so this macro
+/// implements them for you.
 ///
 /// # Example
 ///
@@ -99,7 +101,7 @@ macro_rules! impl_astnode {
         }
 
         impl $crate::RandNode for $enum_name {
-            fn rand(weights: $crate::TargetHeight, rng: &mut ::rand::Rng) -> $enum_name {
+            fn rand(weights: $crate::NodeWeights, rng: &mut ::rand::Rng) -> $enum_name {
                 pick![rng,
                     $(
                         impl_astnode!(@weight $case_type weights),
