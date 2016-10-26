@@ -1,4 +1,4 @@
-Genetic Programming Engine
+Genetic Programming Engine[![Build Status](https://travis-ci.org/darwins-challenge/moonlander-gp.svg?branch=master)](https://travis-ci.org/darwins-challenge/moonlander-gp)
 ==========================
 
 This Genetic Programming library in Rust was developed for the "Fly me to the
