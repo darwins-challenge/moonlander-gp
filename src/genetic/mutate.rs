@@ -3,7 +3,7 @@
 /// Implementer should try to create persisted data-structures
 use rand;
 use super::super::AstNode;
-use super::super::ast::{replace_to_root, find_nodes_and_parents, NodeAndParent};
+use super::super::ast::{replace_to_root, find_nodes_and_parents, NodeInTree};
 
 
 /// Pick a node at random to mutate
@@ -15,7 +15,7 @@ pub fn mutate_tree<T: AstNode+Clone, R: rand::Rng+Sized>(ast: &T, target_height:
     replace_to_root(&picked, mutated)
 }
 
-fn depth<'a>(nap: &NodeAndParent<'a>) -> i32 {
+fn depth<'a>(nap: &NodeInTree<'a>) -> i32 {
     1 + match nap.root_path {
         None => 0,
         Some(ref parent) => depth(parent.as_ref())

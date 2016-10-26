@@ -41,16 +41,16 @@ pub fn depth(node: &AstNode) -> usize {
 }
 
 #[derive(Clone)]
-pub struct NodeAndParent<'a> {
+pub struct NodeInTree<'a> {
     pub node: &'a AstNode,
-    pub root_path: Option<Rc<NodeAndParent<'a>>>
+    pub root_path: Option<Rc<NodeInTree<'a>>>
 }
 
-pub fn find_nodes_and_parents<'a>(root: &'a AstNode) -> Vec<Rc<NodeAndParent<'a>>> {
-    let mut result: Vec<Rc<NodeAndParent<'a>>> = vec![];
+pub fn find_nodes_and_parents<'a>(root: &'a AstNode) -> Vec<Rc<NodeInTree<'a>>> {
+    let mut result: Vec<Rc<NodeInTree<'a>>> = vec![];
     result.reserve(100);  // Skip some resizes we have to do on medium-sized trees
 
-    let current_root_path = Rc::new(NodeAndParent { node: root, root_path: None });
+    let current_root_path = Rc::new(NodeInTree { node: root, root_path: None });
     result.push(current_root_path.clone());
     find_nodes_and_parents_into(root, &current_root_path, &mut result);
 
@@ -58,10 +58,10 @@ pub fn find_nodes_and_parents<'a>(root: &'a AstNode) -> Vec<Rc<NodeAndParent<'a>
 }
 
 fn find_nodes_and_parents_into<'a>(parent: &'a AstNode,
-                               parent_root_path: &Rc<NodeAndParent<'a>>,
-                               acc: &mut Vec<Rc<NodeAndParent<'a>>>) {
+                               parent_root_path: &Rc<NodeInTree<'a>>,
+                               acc: &mut Vec<Rc<NodeInTree<'a>>>) {
     for node in parent.children() {
-        let current_root_path = Rc::new(NodeAndParent { node: node.clone(), root_path: Some(parent_root_path.clone()) });
+        let current_root_path = Rc::new(NodeInTree { node: node.clone(), root_path: Some(parent_root_path.clone()) });
         acc.push(current_root_path.clone());
         find_nodes_and_parents_into(node, &current_root_path, acc);
     }
@@ -94,12 +94,12 @@ pub fn clone_or_replace<T: AstNode+Clone>(child: &T, old_child: &AstNode, new_ch
     }
 }
 
-pub fn replace_to_root<T: AstNode>(nap: &Rc<NodeAndParent>, new_child: Box<AstNode>) -> Box<T> {
+pub fn replace_to_root<T: AstNode>(nap: &Rc<NodeInTree>, new_child: Box<AstNode>) -> Box<T> {
     let mut new_child_opt = Some(new_child);
     do_replace_to_root(nap, &mut new_child_opt)
 }
 
-fn do_replace_to_root<T: AstNode>(nap: &Rc<NodeAndParent>, new_child: &mut Option<Box<AstNode>>) -> Box<T> {
+fn do_replace_to_root<T: AstNode>(nap: &Rc<NodeInTree>, new_child: &mut Option<Box<AstNode>>) -> Box<T> {
     match nap.root_path {
         None => new_child.take().unwrap().downcast().ok().unwrap(),
         Some(ref parent) => {

@@ -6,7 +6,7 @@ use std::collections::btree_map::Entry;
 use std::rc::Rc;
 use rand;
 use super::super::{AstNode, Mutatable};
-use super::super::ast::{NodeAndParent, find_nodes_and_parents, replace_to_root};
+use super::super::ast::{NodeInTree, find_nodes_and_parents, replace_to_root};
 
 /// Pick two random nodes and cross them over
 pub fn crossover_tree<T: AstNode+Mutatable+Clone, R: rand::Rng+Sized>(ast1: &T, ast2: &T, rng: &mut R) -> (Box<T>, Box<T>) {
@@ -29,10 +29,10 @@ pub fn crossover_tree<T: AstNode+Mutatable+Clone, R: rand::Rng+Sized>(ast1: &T, 
     (child1, child2)
 }
 
-fn group_by_type(naps: Vec<Rc<NodeAndParent>>) -> BTreeMap<usize, Vec<Rc<NodeAndParent>>> {
-    let mut ret : BTreeMap<usize, Vec<Rc<NodeAndParent>>> = BTreeMap::new();
+fn group_by_type(naps: Vec<Rc<NodeInTree>>) -> BTreeMap<usize, Vec<Rc<NodeInTree>>> {
+    let mut ret : BTreeMap<usize, Vec<Rc<NodeInTree>>> = BTreeMap::new();
     for nap in naps {
-        let values: &mut Vec<Rc<NodeAndParent>> = match ret.entry(nap.node.node_type()) {
+        let values: &mut Vec<Rc<NodeInTree>> = match ret.entry(nap.node.node_type()) {
             Entry::Occupied(o) => o.into_mut(),
             Entry::Vacant(v) => v.insert(vec![])
         };
