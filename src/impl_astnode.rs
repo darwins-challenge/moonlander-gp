@@ -116,7 +116,6 @@ macro_rules! impl_astnode {
 #[cfg(test)]
 mod tests {
     use super::super::ast::*;
-    use super::super::random_pop::*;
 
     #[derive(Clone,PartialEq,Eq,Debug)]
     enum Tree {
@@ -127,10 +126,6 @@ mod tests {
     impl_astnode!(Tree, 666,
                   leaf Leaf((data d |rng: &mut ::rand::Rng| (rng.next_u32() % 100) as i32)),
                   int Node(left, right));
-
-    impl RandValue for i32 {
-        fn rand(rng: &mut ::rand::Rng) -> i32 { (rng.next_u32() % 100) as i32 }
-    }
 
     #[test]
     fn test_children() {

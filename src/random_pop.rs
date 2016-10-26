@@ -103,3 +103,54 @@ impl NodeWeights {
 /// We need at least some weight, in case we need to make a leaf node
 /// but only internal nodes are available at that point in the tree.
 const MIN_WEIGHT : i32 = 1;
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use super::super::{num, Number, depth};
+    use super::super::genetic::mutate_tree;
+
+    #[derive(Clone)]
+    enum List {
+        Cons(Box<List>),
+        Nil
+    }
+
+    impl_astnode!(List, 0,
+                  int Cons(next),
+                  leaf Nil());
+
+    #[test]
+    fn test_node_heights_on_generation() {
+        let target_height = 8;
+        let n = 1000;
+        let mut rng = ::rand::StdRng::new().unwrap();
+
+        let weights = NodeWeights::fixed(target_height);
+        let programs : Vec<List> = (0..n).map(|_| RandNode::rand(weights, &mut rng)).collect();
+        let avg_height = num::sum(programs.iter().map(|p| depth(p) as Number)) / n as Number;
+
+        // Since we have uniform distribution of heights, the average will be about 0.5
+        // times the max height. Some fudge margin for randomness.
+        assert!(avg_height <= 0.6 * target_height as Number);
+    }
+
+    #[test]
+    fn test_node_heights_during_mutation() {
+        // Check that during mutation, the program doesn't grow endlessly
+        let n = 1000;
+        let target_height = 8;
+        let mut rng = ::rand::StdRng::new().unwrap();
+        let weights = NodeWeights::fixed(target_height);
+
+        let mut program : List = RandNode::rand(weights, &mut rng);
+        for _ in 0..n {
+            program = *mutate_tree(&program, target_height, &mut rng);
+            let depth = depth(&program);
+            println!("Depth: {}", depth);
+            // Check that we didn't grow too large, plus a fudge factor
+            assert!((depth as Number) < target_height as Number * 1.5);
+        }
+    }
+}
