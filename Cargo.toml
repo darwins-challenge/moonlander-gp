@@ -9,6 +9,5 @@ description = "Genetic Programming framework providing AST abstraction and evolu
 [dependencies]
 rand = "0.3"
 rustc-serialize = "0.3"
-log = "*"
-downcast = "*"
-rayon = "*"
+downcast = "0.6"
+rayon = "0.4"
