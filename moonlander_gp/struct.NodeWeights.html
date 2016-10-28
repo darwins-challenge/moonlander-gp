@@ -47,26 +47,28 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-471' class='srclink' href='../src/moonlander_gp/src/random_pop.rs.html#67-70' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct NodeWeights { /* fields omitted */ }</pre><div class='docblock'><p>Weights to use when deciding between internal and leaf nodes.</p>
+               </span><a id='src-255' class='srclink' href='../src/moonlander_gp/src/random_pop.rs.html#67-70' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct NodeWeights {
+    // some fields omitted
+}</pre><div class='docblock'><p>Weights to use when deciding between internal and leaf nodes.</p>
 
 <p>This structure is initialized with a desired target depth, and
 every level advancing in the tree shifts the weights away from
 internal nodes and towards leaf nodes.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-176' class='srclink' href='../src/moonlander_gp/src/random_pop.rs.html#72-99' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.fixed' class='method'><span id='fixed.v' class='invisible'><code>fn <a href='#method.fixed' class='fnname'>fixed</a>(target_height: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span></h4>
-<h4 id='method.randomized' class='method'><span id='randomized.v' class='invisible'><code>fn <a href='#method.randomized' class='fnname'>randomized</a>(max_height: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>, rng: &amp;mut <a class='trait' href='../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) -&gt; <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span></h4>
-<h4 id='method.internal' class='method'><span id='internal.v' class='invisible'><code>fn <a href='#method.internal' class='fnname'>internal</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></span></h4>
-<h4 id='method.leaf' class='method'><span id='leaf.v' class='invisible'><code>fn <a href='#method.leaf' class='fnname'>leaf</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></span></h4>
-<h4 id='method.next_level' class='method'><span id='next_level.v' class='invisible'><code>fn <a href='#method.next_level' class='fnname'>next_level</a>(&amp;self) -&gt; <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span></h4>
-<h4 id='method.gen_child' class='method'><span id='gen_child.v' class='invisible'><code>fn <a href='#method.gen_child' class='fnname'>gen_child</a>&lt;P:&nbsp;<a class='trait' href='../moonlander_gp/trait.RandNode.html' title='moonlander_gp::RandNode'>RandNode</a>&gt;(&amp;self, rng: &amp;mut <a class='trait' href='../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;P&gt;</code></span></h4>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-474' class='srclink' href='../src/moonlander_gp/src/random_pop.rs.html#66' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-475' class='srclink' href='../src/moonlander_gp/src/random_pop.rs.html#66' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-258' class='srclink' href='../src/moonlander_gp/src/random_pop.rs.html#72-99' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fixed' class='method'><code>fn <a href='#method.fixed' class='fnname'>fixed</a>(target_height: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></h4>
+<h4 id='method.randomized' class='method'><code>fn <a href='#method.randomized' class='fnname'>randomized</a>(max_height: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>, rng: &amp;mut <a class='trait' href='../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) -&gt; <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></h4>
+<h4 id='method.internal' class='method'><code>fn <a href='#method.internal' class='fnname'>internal</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+<h4 id='method.leaf' class='method'><code>fn <a href='#method.leaf' class='fnname'>leaf</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+<h4 id='method.next_level' class='method'><code>fn <a href='#method.next_level' class='fnname'>next_level</a>(&amp;self) -&gt; <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></h4>
+<h4 id='method.gen_child' class='method'><code>fn <a href='#method.gen_child' class='fnname'>gen_child</a>&lt;P:&nbsp;<a class='trait' href='../moonlander_gp/trait.RandNode.html' title='moonlander_gp::RandNode'>RandNode</a>&gt;(&amp;self, rng: &amp;mut <a class='trait' href='../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;P&gt;</code></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-249' class='srclink' href='../src/moonlander_gp/src/random_pop.rs.html#66' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></h4>
 <div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
-</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+</div><h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
 <div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
-</div></div></section>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../moonlander_gp/struct.NodeWeights.html' title='moonlander_gp::NodeWeights'>NodeWeights</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-254' class='srclink' href='../src/moonlander_gp/src/random_pop.rs.html#66' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -122,9 +124,11 @@ internal nodes and towards leaf nodes.</p>
     <script>
         window.rootPath = "../";
         window.currentCrate = "moonlander_gp";
+        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
+    
     <script defer src="../search-index.js"></script>
 </body>
 </html>

@@ -47,8 +47,8 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-63' class='srclink' href='../src/moonlander_gp/src/ast.rs.html#108-114' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn clone_or_replace&lt;T:&nbsp;<a class='trait' href='../moonlander_gp/trait.AstNode.html' title='moonlander_gp::AstNode'>AstNode</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a>&gt;(child: &amp;T,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; old_child: &amp;<a class='trait' href='../moonlander_gp/trait.AstNode.html' title='moonlander_gp::AstNode'>AstNode</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new_child: &amp;mut <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='../moonlander_gp/trait.AstNode.html' title='moonlander_gp::AstNode'>AstNode</a>&gt;&gt;)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;T&gt;</pre><div class='docblock'><p>Helper function for use inside <code>replace_children()</code>.</p>
+               </span><a id='src-106' class='srclink' href='../src/moonlander_gp/src/ast.rs.html#108-114' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn clone_or_replace&lt;T:&nbsp;<a class='trait' href='../moonlander_gp/trait.AstNode.html' title='moonlander_gp::AstNode'>AstNode</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a>&gt;(child: &amp;T, old_child: &amp;<a class='trait' href='../moonlander_gp/trait.AstNode.html' title='moonlander_gp::AstNode'>AstNode</a>, new_child: &amp;mut <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='../moonlander_gp/trait.AstNode.html' title='moonlander_gp::AstNode'>AstNode</a>&gt;&gt;) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;T&gt;</pre><div class='docblock'><p>Helper function for use inside <code>replace_children()</code>.</p>
 
 <p>Call this for every child node in <code>replace_children()</code>. The new_child is a
 <code>&amp;mut Option&lt;&gt;</code> so that we can be sure we consume it exactly once.</p>
@@ -108,9 +108,11 @@
     <script>
         window.rootPath = "../";
         window.currentCrate = "moonlander_gp";
+        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
+    
     <script defer src="../search-index.js"></script>
 </body>
 </html>

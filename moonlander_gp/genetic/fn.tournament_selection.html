@@ -47,8 +47,8 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-356' class='srclink' href='../../src/moonlander_gp/src/genetic/select.rs.html#7-18' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn tournament_selection&lt;'a, P, F&gt;(tournament_size: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pop: &amp;'a <a class='struct' href='../../moonlander_gp/struct.Population.html' title='moonlander_gp::Population'>Population</a>&lt;P, F&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rng: &amp;mut <a class='trait' href='../../rand/trait.Rng.html' title='rand::Rng'>Rng</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; &amp;'a P <span class='where'>where P: <a class='trait' href='../../moonlander_gp/trait.AstNode.html' title='moonlander_gp::AstNode'>AstNode</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a>, F: <a class='trait' href='../../moonlander_gp/genetic/trait.Fitness.html' title='moonlander_gp::genetic::Fitness'>Fitness</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></span></pre><div class='docblock'><p>Return the winner from a tournament of size N, randomly picked from the scored population.</p>
+               </span><a id='src-462' class='srclink' href='../../src/moonlander_gp/src/genetic/select.rs.html#7-18' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn tournament_selection&lt;'a,&nbsp;P,&nbsp;F&gt;(tournament_size: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, pop: &amp;'a <a class='struct' href='../../moonlander_gp/struct.Population.html' title='moonlander_gp::Population'>Population</a>&lt;P,&nbsp;F&gt;, rng: &amp;mut <a class='trait' href='../../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) -&gt; &amp;'a P <span class='where'>where P: <a class='trait' href='../../moonlander_gp/trait.AstNode.html' title='moonlander_gp::AstNode'>AstNode</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a>, F: <a class='trait' href='../../moonlander_gp/genetic/trait.Fitness.html' title='moonlander_gp::genetic::Fitness'>Fitness</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></span></pre><div class='docblock'><p>Return the winner from a tournament of size N, randomly picked from the scored population.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 
@@ -105,9 +105,11 @@
     <script>
         window.rootPath = "../../";
         window.currentCrate = "moonlander_gp";
+        window.playgroundUrl = "";
     </script>
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
+    
     <script defer src="../../search-index.js"></script>
 </body>
 </html>

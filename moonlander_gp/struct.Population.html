@@ -47,8 +47,8 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-88' class='srclink' href='../src/moonlander_gp/src/population.rs.html#13-22' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct Population&lt;P:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a>, F:&nbsp;<a class='trait' href='../moonlander_gp/genetic/trait.Fitness.html' title='moonlander_gp::genetic::Fitness'>Fitness</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt; {
+               </span><a id='src-131' class='srclink' href='../src/moonlander_gp/src/population.rs.html#13-22' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Population&lt;P:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a>,&nbsp;F:&nbsp;<a class='trait' href='../moonlander_gp/genetic/trait.Fitness.html' title='moonlander_gp::genetic::Fitness'>Fitness</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt; {
     pub population: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;P&gt;,
     pub generation: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
     pub scores: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;F&gt;,
@@ -56,33 +56,27 @@
 
 <p>The root of each program is of type <code>P</code>, and fitness structures will be
 represented by type <code>F</code>.</p>
-</div><h2 class='fields'>Fields</h2><span id='structfield.population' class='structfield'>
-                           <span id='population.v' class='invisible'>
-                           <code>population: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;P&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Collection of algorithms</p>
-</div><span id='structfield.generation' class='structfield'>
-                           <span id='generation.v' class='invisible'>
-                           <code>generation: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Generation index of this population</p>
-</div><span id='structfield.scores' class='structfield'>
-                           <span id='scores.v' class='invisible'>
-                           <code>scores: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;F&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Collection of fitness scores</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;P:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a>, F:&nbsp;<a class='trait' href='../moonlander_gp/genetic/trait.Fitness.html' title='moonlander_gp::genetic::Fitness'>Fitness</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt; <a class='struct' href='../moonlander_gp/struct.Population.html' title='moonlander_gp::Population'>Population</a>&lt;P, F&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-94' class='srclink' href='../src/moonlander_gp/src/population.rs.html#24-81' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.new' class='method'><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>(n: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, generation: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; <a class='struct' href='../moonlander_gp/struct.Population.html' title='moonlander_gp::Population'>Population</a>&lt;P, F&gt;</code></span></h4>
+</div><h2 class='fields'>Fields</h2><span id='structfield.population' class='structfield'><code>population: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;P&gt;</code>
+                           </span><span class='stab '></span><div class='docblock'><p>Collection of algorithms</p>
+</div><span id='structfield.generation' class='structfield'><code>generation: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code>
+                           </span><span class='stab '></span><div class='docblock'><p>Generation index of this population</p>
+</div><span id='structfield.scores' class='structfield'><code>scores: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;F&gt;</code>
+                           </span><span class='stab '></span><div class='docblock'><p>Collection of fitness scores</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;P:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a>,&nbsp;F:&nbsp;<a class='trait' href='../moonlander_gp/genetic/trait.Fitness.html' title='moonlander_gp::genetic::Fitness'>Fitness</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt; <a class='struct' href='../moonlander_gp/struct.Population.html' title='moonlander_gp::Population'>Population</a>&lt;P,&nbsp;F&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-137' class='srclink' href='../src/moonlander_gp/src/population.rs.html#24-81' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(n: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, generation: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; <a class='struct' href='../moonlander_gp/struct.Population.html' title='moonlander_gp::Population'>Population</a>&lt;P,&nbsp;F&gt;</code></h4>
 <div class='docblock'><p>Create a new population with an estimated size.</p>
 
 <p>This does not create programs yet but simply allocates memory.</p>
-</div><h4 id='method.add' class='method'><span id='add.v' class='invisible'><code>fn <a href='#method.add' class='fnname'>add</a>(&amp;mut self, program: P)</code></span></h4>
+</div><h4 id='method.add' class='method'><code>fn <a href='#method.add' class='fnname'>add</a>(&amp;mut self, program: P)</code></h4>
 <div class='docblock'><p>Add a single program to the population.</p>
-</div><h4 id='method.n' class='method'><span id='n.v' class='invisible'><code>fn <a href='#method.n' class='fnname'>n</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></span></h4>
-<h4 id='method.score' class='method'><span id='score.v' class='invisible'><code>fn <a href='#method.score' class='fnname'>score</a>&lt;S&gt;(&amp;mut self, scoring_fn: S, _: &amp;mut <a class='trait' href='../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) <span class='where'>where S: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;P, &amp;mut <a class='trait' href='../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) -&gt; F + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a></span></code></span></h4>
+</div><h4 id='method.n' class='method'><code>fn <a href='#method.n' class='fnname'>n</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+<h4 id='method.score' class='method'><code>fn <a href='#method.score' class='fnname'>score</a>&lt;S&gt;(&amp;mut self, scoring_fn: S, _: &amp;mut <a class='trait' href='../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) <span class='where'>where S: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;P, &amp;mut <a class='trait' href='../rand/trait.Rng.html' title='rand::Rng'>Rng</a>) -&gt; F + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a></span></code></h4>
 <div class='docblock'><p>Apply a scoring function to the entire population.</p>
-</div><h4 id='method.avg_score' class='method'><span id='avg_score.v' class='invisible'><code>fn <a href='#method.avg_score' class='fnname'>avg_score</a>(&amp;self) -&gt; <a class='type' href='../moonlander_gp/num/type.Number.html' title='moonlander_gp::num::Number'>Number</a></code></span></h4>
-<h4 id='method.best_score' class='method'><span id='best_score.v' class='invisible'><code>fn <a href='#method.best_score' class='fnname'>best_score</a>(&amp;self) -&gt; <a class='type' href='../moonlander_gp/num/type.Number.html' title='moonlander_gp::num::Number'>Number</a></code></span></h4>
-<h4 id='method.champion' class='method'><span id='champion.v' class='invisible'><code>fn <a href='#method.champion' class='fnname'>champion</a>&lt;'a&gt;(&amp;'a self) -&gt; CreatureScore&lt;'a, P, F&gt; <span class='where'>where P: <a class='trait' href='../rustc_serialize/serialize/trait.Encodable.html' title='rustc_serialize::serialize::Encodable'>Encodable</a>, F: <a class='trait' href='../rustc_serialize/serialize/trait.Encodable.html' title='rustc_serialize::serialize::Encodable'>Encodable</a></span></code></span></h4>
+</div><h4 id='method.avg_score' class='method'><code>fn <a href='#method.avg_score' class='fnname'>avg_score</a>(&amp;self) -&gt; <a class='type' href='../moonlander_gp/num/type.Number.html' title='moonlander_gp::num::Number'>Number</a></code></h4>
+<h4 id='method.best_score' class='method'><code>fn <a href='#method.best_score' class='fnname'>best_score</a>(&amp;self) -&gt; <a class='type' href='../moonlander_gp/num/type.Number.html' title='moonlander_gp::num::Number'>Number</a></code></h4>
+<h4 id='method.champion' class='method'><code>fn <a href='#method.champion' class='fnname'>champion</a>&lt;'a&gt;(&amp;'a self) -&gt; CreatureScore&lt;'a,&nbsp;P,&nbsp;F&gt; <span class='where'>where P: <a class='trait' href='../rustc_serialize/serialize/trait.Encodable.html' title='rustc_serialize::serialize::Encodable'>Encodable</a>, F: <a class='trait' href='../rustc_serialize/serialize/trait.Encodable.html' title='rustc_serialize::serialize::Encodable'>Encodable</a></span></code></h4>
 <div class='docblock'><p>Return the best program from the population.</p>
-</div><h4 id='method.best_n' class='method'><span id='best_n.v' class='invisible'><code>fn <a href='#method.best_n' class='fnname'>best_n</a>&lt;'a&gt;(&amp;self, n: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;P&gt;</code></span></h4>
+</div><h4 id='method.best_n' class='method'><code>fn <a href='#method.best_n' class='fnname'>best_n</a>&lt;'a&gt;(&amp;self, n: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;P&gt;</code></h4>
 <div class='docblock'><p>Return the best N programs from the population.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
@@ -140,9 +134,11 @@ represented by type <code>F</code>.</p>
     <script>
         window.rootPath = "../";
         window.currentCrate = "moonlander_gp";
+        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
+    
     <script defer src="../search-index.js"></script>
 </body>
 </html>
