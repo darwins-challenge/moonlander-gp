@@ -1,7 +1,7 @@
 [package]
 name = "moonlander-gp"
 version = "0.1.0"
-authors = ["Rico Huijbers <rix0rrr@gmail.com>"]
+authors = ["Rico Huijbers <rix0rrr@gmail.com>", "Daan van Berkel <daan.v.berkel.1980@gmail.com>"]
 license = "MIT"
 description = "Genetic Programming framework providing AST abstraction and evolution routines."
 
