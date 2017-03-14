@@ -9,7 +9,6 @@
 
     <title>num.rs.html -- source</title>
 
-    <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
     
@@ -102,64 +101,64 @@
 <span id="57">57</span>
 <span id="58">58</span>
 <span id="59">59</span>
-</pre><pre class="rust ">
-<span class="doccomment">//! Numeric helper functions</span>
+</pre><pre class='rust '>
+<span class='doccomment'>//! Numeric helper functions</span>
 
-<span class="doccomment">/// The general number type used by all simulations</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Number</span> <span class="op">=</span> <span class="ident">f32</span>;
+<span class='doccomment'>/// The general number type used by all simulations</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>Number</span> <span class='op'>=</span> <span class='ident'>f32</span>;
 
-<span class="doccomment">/// A max() function that only requires a partial ordering.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">partial_max</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&gt;</span>(<span class="ident">iter</span>: <span class="ident">I</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">I</span>::<span class="ident">Item</span><span class="op">&gt;</span>
-    <span class="kw">where</span> <span class="ident">I</span>::<span class="ident">Item</span> : <span class="ident">PartialOrd</span> {
-    <span class="ident">iter</span>.<span class="ident">fold</span>(<span class="prelude-val">None</span>, <span class="op">|</span><span class="ident">ret</span>, <span class="ident">x</span><span class="op">|</span> {
-        <span class="kw">match</span> <span class="ident">ret</span> {
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">x</span>),
-            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">y</span>) <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="kw-2">*</span><span class="ident">y</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">x</span>),
-            _ <span class="op">=&gt;</span> <span class="ident">ret</span>
+<span class='doccomment'>/// A max() function that only requires a partial ordering.</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>partial_max</span><span class='op'>&lt;</span><span class='ident'>I</span>: <span class='ident'>Iterator</span><span class='op'>&gt;</span>(<span class='ident'>iter</span>: <span class='ident'>I</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>I</span>::<span class='ident'>Item</span><span class='op'>&gt;</span>
+    <span class='kw'>where</span> <span class='ident'>I</span>::<span class='ident'>Item</span> : <span class='ident'>PartialOrd</span> {
+    <span class='ident'>iter</span>.<span class='ident'>fold</span>(<span class='prelude-val'>None</span>, <span class='op'>|</span><span class='ident'>ret</span>, <span class='ident'>x</span><span class='op'>|</span> {
+        <span class='kw'>match</span> <span class='ident'>ret</span> {
+            <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
+            <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>y</span>) <span class='kw'>if</span> <span class='ident'>x</span> <span class='op'>&gt;</span> <span class='op'>*</span><span class='ident'>y</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
+            _ <span class='op'>=&gt;</span> <span class='ident'>ret</span>
         }
     })
 }
 
-<span class="doccomment">/// A min() function that only requires a partial ordering.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">partial_min</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&gt;</span>(<span class="ident">iter</span>: <span class="ident">I</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">I</span>::<span class="ident">Item</span><span class="op">&gt;</span>
-    <span class="kw">where</span> <span class="ident">I</span>::<span class="ident">Item</span> : <span class="ident">PartialOrd</span> {
-    <span class="ident">iter</span>.<span class="ident">fold</span>(<span class="prelude-val">None</span>, <span class="op">|</span><span class="ident">ret</span>, <span class="ident">x</span><span class="op">|</span> {
-        <span class="kw">match</span> <span class="ident">ret</span> {
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">x</span>),
-            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">y</span>) <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="kw-2">*</span><span class="ident">y</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">x</span>),
-            _ <span class="op">=&gt;</span> <span class="ident">ret</span>
+<span class='doccomment'>/// A min() function that only requires a partial ordering.</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>partial_min</span><span class='op'>&lt;</span><span class='ident'>I</span>: <span class='ident'>Iterator</span><span class='op'>&gt;</span>(<span class='ident'>iter</span>: <span class='ident'>I</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>I</span>::<span class='ident'>Item</span><span class='op'>&gt;</span>
+    <span class='kw'>where</span> <span class='ident'>I</span>::<span class='ident'>Item</span> : <span class='ident'>PartialOrd</span> {
+    <span class='ident'>iter</span>.<span class='ident'>fold</span>(<span class='prelude-val'>None</span>, <span class='op'>|</span><span class='ident'>ret</span>, <span class='ident'>x</span><span class='op'>|</span> {
+        <span class='kw'>match</span> <span class='ident'>ret</span> {
+            <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
+            <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>y</span>) <span class='kw'>if</span> <span class='ident'>x</span> <span class='op'>&lt;</span> <span class='op'>*</span><span class='ident'>y</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
+            _ <span class='op'>=&gt;</span> <span class='ident'>ret</span>
         }
     })
 }
 
-<span class="doccomment">/// A sum() function to use on an iterator, because Iterator.sum() is unstable.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sum</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span><span class="op">=</span><span class="ident">Number</span><span class="op">&gt;&gt;</span>(<span class="ident">iter</span>: <span class="ident">I</span>) <span class="op">-&gt;</span> <span class="ident">Number</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">total</span> <span class="op">=</span> <span class="number">0.0</span>;
-    <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="ident">iter</span> {
-        <span class="ident">total</span> <span class="op">+=</span> <span class="ident">x</span>;
+<span class='doccomment'>/// A sum() function to use on an iterator, because Iterator.sum() is unstable.</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>sum</span><span class='op'>&lt;</span><span class='ident'>I</span>: <span class='ident'>Iterator</span><span class='op'>&lt;</span><span class='ident'>Item</span><span class='op'>=</span><span class='ident'>Number</span><span class='op'>&gt;&gt;</span>(<span class='ident'>iter</span>: <span class='ident'>I</span>) <span class='op'>-&gt;</span> <span class='ident'>Number</span> {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>total</span> <span class='op'>=</span> <span class='number'>0.0</span>;
+    <span class='kw'>for</span> <span class='ident'>x</span> <span class='kw'>in</span> <span class='ident'>iter</span> {
+        <span class='ident'>total</span> <span class='op'>+=</span> <span class='ident'>x</span>;
     }
-    <span class="ident">total</span>
+    <span class='ident'>total</span>
 }
 
-<span class="doccomment">/// Crop a value to an N-sized torus</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">torus</span>(<span class="ident">x</span>: <span class="ident">i32</span>, <span class="ident">n</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="ident">i32</span> {
-    <span class="kw">let</span> <span class="ident">k</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="number">0</span> { <span class="op">-</span><span class="ident">x</span> <span class="op">/</span> <span class="ident">n</span> <span class="op">+</span> <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> };
-    (<span class="ident">x</span> <span class="op">+</span> <span class="ident">k</span> <span class="op">*</span> <span class="ident">n</span>) <span class="op">%</span> <span class="ident">n</span>
+<span class='doccomment'>/// Crop a value to an N-sized torus</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>torus</span>(<span class='ident'>x</span>: <span class='ident'>i32</span>, <span class='ident'>n</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='ident'>i32</span> {
+    <span class='kw'>let</span> <span class='ident'>k</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ident'>x</span> <span class='op'>&lt;</span> <span class='number'>0</span> { <span class='op'>-</span><span class='ident'>x</span> <span class='op'>/</span> <span class='ident'>n</span> <span class='op'>+</span> <span class='number'>1</span> } <span class='kw'>else</span> { <span class='number'>0</span> };
+    (<span class='ident'>x</span> <span class='op'>+</span> <span class='ident'>k</span> <span class='op'>*</span> <span class='ident'>n</span>) <span class='op'>%</span> <span class='ident'>n</span>
 }
 
-<span class="doccomment">/// Square a number</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">square</span>(<span class="ident">x</span>: <span class="ident">Number</span>) <span class="op">-&gt;</span> <span class="ident">Number</span> {
-    <span class="ident">x</span> <span class="op">*</span> <span class="ident">x</span>
+<span class='doccomment'>/// Square a number</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>square</span>(<span class='ident'>x</span>: <span class='ident'>Number</span>) <span class='op'>-&gt;</span> <span class='ident'>Number</span> {
+    <span class='ident'>x</span> <span class='op'>*</span> <span class='ident'>x</span>
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">test</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
+<span class='kw'>mod</span> <span class='ident'>test</span> {
+    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='op'>*</span>;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_torus</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">torus</span>(<span class="number">33</span>, <span class="number">32</span>));
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">torus</span>(<span class="op">-</span><span class="number">31</span>, <span class="number">32</span>));
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>test_torus</span>() {
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>torus</span>(<span class='number'>33</span>, <span class='number'>32</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>torus</span>(<span class='op'>-</span><span class='number'>31</span>, <span class='number'>32</span>));
     }
 }
 </pre>

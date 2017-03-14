@@ -9,7 +9,6 @@
 
     <title>rayon::par_iter::internal::UnindexedConsumer - Rust</title>
 
-    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -44,19 +43,19 @@
     </nav>
 
     <section id='main' class="content trait">
-<h1 class='fqn'><span class='in-band'>Trait <a href='../../index.html'>rayon</a>::<wbr><a href='../index.html'>par_iter</a>::<wbr><a href='index.html'>internal</a>::<wbr><a class="trait" href=''>UnindexedConsumer</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Trait <a href='../../index.html'>rayon</a>::<wbr><a href='../index.html'>par_iter</a>::<wbr><a href='index.html'>internal</a>::<wbr><a class='trait' href=''>UnindexedConsumer</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
                </span><a class='srclink' href='../../../src/rayon/par_iter/internal.rs.html#74-77' title='goto source code'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait UnindexedConsumer&lt;ITEM&gt;: <a class="trait" href="../../../rayon/par_iter/internal/trait.Consumer.html" title="trait rayon::par_iter::internal::Consumer">Consumer</a>&lt;ITEM&gt; {
+<pre class='rust trait'>pub trait UnindexedConsumer&lt;ITEM&gt;: <a class='trait' href='../../../rayon/par_iter/internal/trait.Consumer.html' title='rayon::par_iter::internal::Consumer'>Consumer</a>&lt;ITEM&gt; {
     fn <a href='#tymethod.split_off' class='fnname'>split_off</a>(&amp;self) -&gt; Self;
-    fn <a href='#tymethod.to_reducer' class='fnname'>to_reducer</a>(&amp;self) -&gt; Self::<a class="trait" href="../../../rayon/par_iter/internal/trait.Consumer.html" title="trait rayon::par_iter::internal::Consumer">Reducer</a>;
+    fn <a href='#tymethod.to_reducer' class='fnname'>to_reducer</a>(&amp;self) -&gt; Self::<a class='trait' href='../../../rayon/par_iter/internal/trait.Consumer.html' title='rayon::par_iter::internal::Consumer'>Reducer</a>;
 }</pre><div class='docblock'><p>A stateless consumer can be freely copied.</p>
 </div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.split_off' class='method'><span id='split_off.v' class='invisible'><code>fn <a href='#tymethod.split_off' class='fnname'>split_off</a>(&amp;self) -&gt; Self</code></span></h3><h3 id='tymethod.to_reducer' class='method'><span id='to_reducer.v' class='invisible'><code>fn <a href='#tymethod.to_reducer' class='fnname'>to_reducer</a>(&amp;self) -&gt; Self::<a class="trait" href="../../../rayon/par_iter/internal/trait.Consumer.html" title="trait rayon::par_iter::internal::Consumer">Reducer</a></code></span></h3></div>
+        <h3 id='tymethod.split_off' class='method stab '><span id='split_off.v' class='invisible'><code>fn <a href='#tymethod.split_off' class='fnname'>split_off</a>(&amp;self) -&gt; Self</code></span></h3><h3 id='tymethod.to_reducer' class='method stab '><span id='to_reducer.v' class='invisible'><code>fn <a href='#tymethod.to_reducer' class='fnname'>to_reducer</a>(&amp;self) -&gt; Self::<a class='trait' href='../../../rayon/par_iter/internal/trait.Consumer.html' title='rayon::par_iter::internal::Consumer'>Reducer</a></code></span></h3></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
     </ul><script type="text/javascript" async
