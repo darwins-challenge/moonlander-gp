@@ -9,6 +9,7 @@
 
     <title>select.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -60,24 +61,24 @@
 <span id="16">16</span>
 <span id="17">17</span>
 <span id="18">18</span>
-</pre><pre class='rust '>
-<span class='kw'>use</span> <span class='ident'>rand</span>::<span class='ident'>Rng</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>fitness</span>::<span class='ident'>Fitness</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::<span class='ident'>AstNode</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::<span class='ident'>Population</span>;
+</pre><pre class="rust ">
+<span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">fitness</span>::<span class="ident">Fitness</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">AstNode</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">Population</span>;
 
-<span class='doccomment'>/// Return the winner from a tournament of size N, randomly picked from the scored population.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>tournament_selection</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>P</span>, <span class='ident'>F</span><span class='op'>&gt;</span>(<span class='ident'>tournament_size</span>: <span class='ident'>usize</span>, <span class='ident'>pop</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>Population</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span><span class='op'>&gt;</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Rng</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>P</span>
-    <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>AstNode</span><span class='op'>+</span><span class='ident'>Clone</span><span class='op'>+</span><span class='ident'>Sync</span>,
-          <span class='ident'>F</span>: <span class='ident'>Fitness</span><span class='op'>+</span><span class='ident'>Send</span>
+<span class="doccomment">/// Return the winner from a tournament of size N, randomly picked from the scored population.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tournament_selection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">P</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">tournament_size</span>: <span class="ident">usize</span>, <span class="ident">pop</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Population</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span><span class="op">&gt;</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Rng</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">P</span>
+    <span class="kw">where</span> <span class="ident">P</span>: <span class="ident">AstNode</span><span class="op">+</span><span class="ident">Clone</span><span class="op">+</span><span class="ident">Sync</span>,
+          <span class="ident">F</span>: <span class="ident">Fitness</span><span class="op">+</span><span class="ident">Send</span>
 {
-    <span class='comment'>// Generate N random indexes. Slightly faster than rand::sample(), don&#39;t care about</span>
-    <span class='comment'>// the inaccuracy introduced by sampling with replacement.</span>
-    <span class='kw'>let</span> <span class='ident'>count</span> <span class='op'>=</span> <span class='ident'>pop</span>.<span class='ident'>n</span>();
-    <span class='kw'>let</span> <span class='ident'>candidate_indexes</span> <span class='op'>=</span> (<span class='number'>0</span>..<span class='ident'>tournament_size</span>).<span class='ident'>map</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>rng</span>.<span class='ident'>next_u64</span>() <span class='kw'>as</span> <span class='ident'>usize</span> <span class='op'>%</span> <span class='ident'>count</span>);
+    <span class="comment">// Generate N random indexes. Slightly faster than rand::sample(), don&#39;t care about</span>
+    <span class="comment">// the inaccuracy introduced by sampling with replacement.</span>
+    <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">pop</span>.<span class="ident">n</span>();
+    <span class="kw">let</span> <span class="ident">candidate_indexes</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">tournament_size</span>).<span class="ident">map</span>(<span class="op">|</span>_<span class="op">|</span> <span class="ident">rng</span>.<span class="ident">next_u64</span>() <span class="kw">as</span> <span class="ident">usize</span> <span class="op">%</span> <span class="ident">count</span>);
 
-    <span class='kw'>let</span> (_, <span class='ident'>winner_i</span>) <span class='op'>=</span> <span class='ident'>candidate_indexes</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>i</span><span class='op'>|</span> (<span class='kw-2'>&amp;</span><span class='ident'>pop</span>.<span class='ident'>scores</span>[<span class='ident'>i</span>], <span class='ident'>i</span>)).<span class='ident'>max_by_key</span>(<span class='op'>|</span><span class='ident'>f</span><span class='op'>|</span> <span class='ident'>f</span>.<span class='number'>0</span>.<span class='ident'>score_card</span>()).<span class='ident'>unwrap</span>();
-    <span class='kw-2'>&amp;</span><span class='ident'>pop</span>.<span class='ident'>population</span>[<span class='ident'>winner_i</span>]
+    <span class="kw">let</span> (_, <span class="ident">winner_i</span>) <span class="op">=</span> <span class="ident">candidate_indexes</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> (<span class="kw-2">&amp;</span><span class="ident">pop</span>.<span class="ident">scores</span>[<span class="ident">i</span>], <span class="ident">i</span>)).<span class="ident">max_by_key</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="ident">f</span>.<span class="number">0</span>.<span class="ident">score_card</span>()).<span class="ident">unwrap</span>();
+    <span class="kw-2">&amp;</span><span class="ident">pop</span>.<span class="ident">population</span>[<span class="ident">winner_i</span>]
 }
 </pre>
 </section>

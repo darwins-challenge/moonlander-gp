@@ -9,6 +9,7 @@
 
     <title>evolve.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -97,61 +98,61 @@
 <span id="53">53</span>
 <span id="54">54</span>
 <span id="55">55</span>
-</pre><pre class='rust '>
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>Fitness</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::<span class='ident'>Population</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::{<span class='ident'>AstNode</span>, <span class='ident'>Mutatable</span>};
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>crossover</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>mutate</span>;
-<span class='kw'>use</span> <span class='ident'>rand</span>::<span class='ident'>Rng</span>;
+</pre><pre class="rust ">
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">Fitness</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">Population</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::{<span class="ident">AstNode</span>, <span class="ident">Mutatable</span>};
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">crossover</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">mutate</span>;
+<span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
 
-<span class='doccomment'>/// Parameters to the `evolve` function.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Weights</span> {
-    <span class='kw'>pub</span> <span class='ident'>reproduce</span>: <span class='ident'>u32</span>,
-    <span class='kw'>pub</span> <span class='ident'>mutate</span>: <span class='ident'>u32</span>,
-    <span class='kw'>pub</span> <span class='ident'>crossover</span>: <span class='ident'>u32</span>,
-    <span class='kw'>pub</span> <span class='ident'>tree_height</span>: <span class='ident'>i32</span>
+<span class="doccomment">/// Parameters to the `evolve` function.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Weights</span> {
+    <span class="kw">pub</span> <span class="ident">reproduce</span>: <span class="ident">u32</span>,
+    <span class="kw">pub</span> <span class="ident">mutate</span>: <span class="ident">u32</span>,
+    <span class="kw">pub</span> <span class="ident">crossover</span>: <span class="ident">u32</span>,
+    <span class="kw">pub</span> <span class="ident">tree_height</span>: <span class="ident">i32</span>
 }
 
-<span class='doccomment'>/// Evolve an old generation into a new generation.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Uses the parameters in the `Weights` structure and the selection algorithm</span>
-<span class='doccomment'>/// to pick and evolve individuals from the given population into a new</span>
-<span class='doccomment'>/// one.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>evolve</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span>, <span class='ident'>S</span>, <span class='ident'>R</span>: <span class='ident'>Rng</span><span class='op'>&gt;</span>(<span class='ident'>pop</span>: <span class='ident'>Population</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span><span class='op'>&gt;</span>, <span class='ident'>weights</span>: <span class='kw-2'>&amp;</span><span class='ident'>Weights</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>R</span>, <span class='ident'>selector</span>: <span class='ident'>S</span>) <span class='op'>-&gt;</span> <span class='ident'>Population</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span><span class='op'>&gt;</span>
-    <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>AstNode</span><span class='op'>+</span><span class='ident'>Clone</span><span class='op'>+</span><span class='ident'>Mutatable</span><span class='op'>+</span><span class='ident'>Sync</span>,
-          <span class='ident'>F</span>: <span class='ident'>Fitness</span><span class='op'>+</span><span class='ident'>Send</span>,
-          <span class='ident'>S</span>: <span class='kw'>for</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>Fn</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>Population</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span><span class='op'>&gt;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Rng</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>P</span>
+<span class="doccomment">/// Evolve an old generation into a new generation.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Uses the parameters in the `Weights` structure and the selection algorithm</span>
+<span class="doccomment">/// to pick and evolve individuals from the given population into a new</span>
+<span class="doccomment">/// one.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">evolve</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span>, <span class="ident">S</span>, <span class="ident">R</span>: <span class="ident">Rng</span><span class="op">&gt;</span>(<span class="ident">pop</span>: <span class="ident">Population</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span><span class="op">&gt;</span>, <span class="ident">weights</span>: <span class="kw-2">&amp;</span><span class="ident">Weights</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">R</span>, <span class="ident">selector</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="ident">Population</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">P</span>: <span class="ident">AstNode</span><span class="op">+</span><span class="ident">Clone</span><span class="op">+</span><span class="ident">Mutatable</span><span class="op">+</span><span class="ident">Sync</span>,
+          <span class="ident">F</span>: <span class="ident">Fitness</span><span class="op">+</span><span class="ident">Send</span>,
+          <span class="ident">S</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Population</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span><span class="op">&gt;</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Rng</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">P</span>
 {
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='ident'>Population</span>::<span class='ident'>new</span>(<span class='ident'>pop</span>.<span class='ident'>n</span>(), <span class='ident'>pop</span>.<span class='ident'>generation</span> <span class='op'>+</span> <span class='number'>1</span>);
-    <span class='kw'>while</span> <span class='ident'>ret</span>.<span class='ident'>n</span>() <span class='op'>&lt;</span> <span class='ident'>pop</span>.<span class='ident'>n</span>() {
-        <span class='macro'>pick</span><span class='macro'>!</span>[<span class='ident'>rng</span>,
-            <span class='ident'>weights</span>.<span class='ident'>reproduce</span>, {
-                <span class='kw'>let</span> <span class='ident'>winner</span> <span class='op'>=</span> <span class='ident'>selector</span>(<span class='kw-2'>&amp;</span><span class='ident'>pop</span>, <span class='ident'>rng</span>);
-                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='ident'>winner</span>.<span class='ident'>clone</span>());
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="ident">Population</span>::<span class="ident">new</span>(<span class="ident">pop</span>.<span class="ident">n</span>(), <span class="ident">pop</span>.<span class="ident">generation</span> <span class="op">+</span> <span class="number">1</span>);
+    <span class="kw">while</span> <span class="ident">ret</span>.<span class="ident">n</span>() <span class="op">&lt;</span> <span class="ident">pop</span>.<span class="ident">n</span>() {
+        <span class="macro">pick</span><span class="macro">!</span>[<span class="ident">rng</span>,
+            <span class="ident">weights</span>.<span class="ident">reproduce</span>, {
+                <span class="kw">let</span> <span class="ident">winner</span> <span class="op">=</span> <span class="ident">selector</span>(<span class="kw-2">&amp;</span><span class="ident">pop</span>, <span class="ident">rng</span>);
+                <span class="ident">ret</span>.<span class="ident">add</span>(<span class="ident">winner</span>.<span class="ident">clone</span>());
             },
-            <span class='ident'>weights</span>.<span class='ident'>mutate</span>, {
-                <span class='kw'>let</span> <span class='ident'>winner</span> <span class='op'>=</span> <span class='ident'>selector</span>(<span class='kw-2'>&amp;</span><span class='ident'>pop</span>, <span class='ident'>rng</span>);
-                <span class='kw'>let</span> <span class='ident'>target_height</span> <span class='op'>=</span> <span class='ident'>rng</span>.<span class='ident'>next_u32</span>() <span class='kw'>as</span> <span class='ident'>i32</span> <span class='op'>%</span> <span class='ident'>weights</span>.<span class='ident'>tree_height</span>;
-                <span class='kw'>let</span> <span class='ident'>mutation</span> <span class='op'>=</span> <span class='ident'>mutate</span>::<span class='ident'>mutate_tree</span>(<span class='ident'>winner</span>, <span class='ident'>target_height</span>, <span class='ident'>rng</span>);
-                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='op'>*</span><span class='ident'>mutation</span>);
+            <span class="ident">weights</span>.<span class="ident">mutate</span>, {
+                <span class="kw">let</span> <span class="ident">winner</span> <span class="op">=</span> <span class="ident">selector</span>(<span class="kw-2">&amp;</span><span class="ident">pop</span>, <span class="ident">rng</span>);
+                <span class="kw">let</span> <span class="ident">target_height</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">next_u32</span>() <span class="kw">as</span> <span class="ident">i32</span> <span class="op">%</span> <span class="ident">weights</span>.<span class="ident">tree_height</span>;
+                <span class="kw">let</span> <span class="ident">mutation</span> <span class="op">=</span> <span class="ident">mutate</span>::<span class="ident">mutate_tree</span>(<span class="ident">winner</span>, <span class="ident">target_height</span>, <span class="ident">rng</span>);
+                <span class="ident">ret</span>.<span class="ident">add</span>(<span class="kw-2">*</span><span class="ident">mutation</span>);
             },
-            <span class='ident'>weights</span>.<span class='ident'>crossover</span>, {
-                <span class='kw'>if</span> <span class='ident'>pop</span>.<span class='ident'>n</span>() <span class='op'>&lt;</span> <span class='number'>2</span> { <span class='kw'>continue</span>; }
+            <span class="ident">weights</span>.<span class="ident">crossover</span>, {
+                <span class="kw">if</span> <span class="ident">pop</span>.<span class="ident">n</span>() <span class="op">&lt;</span> <span class="number">2</span> { <span class="kw">continue</span>; }
 
-                <span class='kw'>let</span> <span class='ident'>one</span> <span class='op'>=</span> <span class='ident'>selector</span>(<span class='kw-2'>&amp;</span><span class='ident'>pop</span>, <span class='ident'>rng</span>);
-                <span class='kw'>let</span> <span class='ident'>two</span> <span class='op'>=</span> <span class='ident'>selector</span>(<span class='kw-2'>&amp;</span><span class='ident'>pop</span>, <span class='ident'>rng</span>);
+                <span class="kw">let</span> <span class="ident">one</span> <span class="op">=</span> <span class="ident">selector</span>(<span class="kw-2">&amp;</span><span class="ident">pop</span>, <span class="ident">rng</span>);
+                <span class="kw">let</span> <span class="ident">two</span> <span class="op">=</span> <span class="ident">selector</span>(<span class="kw-2">&amp;</span><span class="ident">pop</span>, <span class="ident">rng</span>);
 
-                <span class='kw'>let</span> (<span class='ident'>child1</span>, <span class='ident'>child2</span>) <span class='op'>=</span> <span class='ident'>crossover</span>::<span class='ident'>crossover_tree</span>(<span class='ident'>one</span>, <span class='ident'>two</span>, <span class='ident'>rng</span>);
+                <span class="kw">let</span> (<span class="ident">child1</span>, <span class="ident">child2</span>) <span class="op">=</span> <span class="ident">crossover</span>::<span class="ident">crossover_tree</span>(<span class="ident">one</span>, <span class="ident">two</span>, <span class="ident">rng</span>);
 
-                <span class='comment'>// We insert both children, this might make the population go over size, but never</span>
-                <span class='comment'>// by more than 1.</span>
-                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='op'>*</span><span class='ident'>child1</span>);
-                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='op'>*</span><span class='ident'>child2</span>);
+                <span class="comment">// We insert both children, this might make the population go over size, but never</span>
+                <span class="comment">// by more than 1.</span>
+                <span class="ident">ret</span>.<span class="ident">add</span>(<span class="kw-2">*</span><span class="ident">child1</span>);
+                <span class="ident">ret</span>.<span class="ident">add</span>(<span class="kw-2">*</span><span class="ident">child2</span>);
             }
         ];
     }
-    <span class='ident'>ret</span>
+    <span class="ident">ret</span>
 }
 </pre>
 </section>
