@@ -199,160 +199,160 @@
 <span id="154">154</span>
 <span id="155">155</span>
 <span id="156">156</span>
-</pre><pre class='rust '>
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cmp</span>::<span class='ident'>max</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::{<span class='ident'>AstNode</span>, <span class='ident'>Population</span>, <span class='ident'>Fitness</span>, <span class='ident'>Mutatable</span>, <span class='ident'>Number</span>};
-<span class='kw'>use</span> <span class='ident'>rand</span>::<span class='ident'>Rng</span>;
-<span class='kw'>use</span> <span class='ident'>rustc_serialize</span>::<span class='ident'>Encodable</span>;
+</pre><pre class="rust ">
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>::<span class="ident">max</span>;
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">AstNode</span>, <span class="ident">Population</span>, <span class="ident">Fitness</span>, <span class="ident">Mutatable</span>, <span class="ident">Number</span>};
+<span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
+<span class="kw">use</span> <span class="ident">rustc_serialize</span>::<span class="ident">Encodable</span>;
 
-<span class='doccomment'>/// Implement trait to generate random subtrees of a given type.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// This trait is like `rand::Rand`, but it doesn&#39;t require that the `Rng`</span>
-<span class='doccomment'>/// instance is `Sized`, so that we can combine it with the `Mutatable` trait.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// It also takes a parameter that controls the height of trees that will be</span>
-<span class='doccomment'>/// randomly generated. The `NodeWeights` parameter will indicate the relative</span>
-<span class='doccomment'>/// weights to be used when deciding between generating internal vs. leaf nodes</span>
-<span class='doccomment'>/// in the tree.</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>RandNode</span>: <span class='ident'>Sized</span> {
-    <span class='kw'>fn</span> <span class='ident'>rand</span>(<span class='ident'>weights</span>: <span class='ident'>NodeWeights</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Rng</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>;
+<span class="doccomment">/// Implement trait to generate random subtrees of a given type.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This trait is like `rand::Rand`, but it doesn&#39;t require that the `Rng`</span>
+<span class="doccomment">/// instance is `Sized`, so that we can combine it with the `Mutatable` trait.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// It also takes a parameter that controls the height of trees that will be</span>
+<span class="doccomment">/// randomly generated. The `NodeWeights` parameter will indicate the relative</span>
+<span class="doccomment">/// weights to be used when deciding between generating internal vs. leaf nodes</span>
+<span class="doccomment">/// in the tree.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">RandNode</span>: <span class="ident">Sized</span> {
+    <span class="kw">fn</span> <span class="ident">rand</span>(<span class="ident">weights</span>: <span class="ident">NodeWeights</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Rng</span>) <span class="op">-&gt;</span> <span class="self">Self</span>;
 }
 
-<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>RandNode</span><span class='op'>+</span><span class='ident'>AstNode</span><span class='op'>&gt;</span> <span class='ident'>Mutatable</span> <span class='kw'>for</span> <span class='ident'>T</span> {
-    <span class='kw'>fn</span> <span class='ident'>mutate</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>max_height</span>: <span class='ident'>i32</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Rng</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span> {
-        <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>T</span>::<span class='ident'>rand</span>(<span class='ident'>NodeWeights</span>::<span class='ident'>fixed</span>(<span class='ident'>max_height</span>), <span class='ident'>rng</span>))
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">RandNode</span><span class="op">+</span><span class="ident">AstNode</span><span class="op">&gt;</span> <span class="ident">Mutatable</span> <span class="kw">for</span> <span class="ident">T</span> {
+    <span class="kw">fn</span> <span class="ident">mutate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_height</span>: <span class="ident">i32</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Rng</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span> {
+        <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">T</span>::<span class="ident">rand</span>(<span class="ident">NodeWeights</span>::<span class="ident">fixed</span>(<span class="ident">max_height</span>), <span class="ident">rng</span>))
     }
 }
 
-<span class='doccomment'>/// Generate a random population of size N.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Trees of various depths will be generated in a uniform fashion between</span>
-<span class='doccomment'>/// 1 and `max_depth`.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>random_population</span><span class='op'>&lt;</span><span class='ident'>P</span>: <span class='ident'>RandNode</span><span class='op'>+</span><span class='ident'>Clone</span><span class='op'>+</span><span class='ident'>Sync</span>, <span class='ident'>F</span>: <span class='ident'>Fitness</span><span class='op'>+</span><span class='ident'>Sized</span><span class='op'>+</span><span class='ident'>Send</span>, <span class='ident'>R</span>: <span class='ident'>Rng</span><span class='op'>&gt;</span>(<span class='ident'>n</span>: <span class='ident'>usize</span>, <span class='ident'>max_depth</span>: <span class='ident'>usize</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>R</span>) <span class='op'>-&gt;</span> <span class='ident'>Population</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span><span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='ident'>Population</span>::<span class='ident'>new</span>(<span class='ident'>n</span>, <span class='number'>0</span>);
-    <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='ident'>n</span> {
-        <span class='kw'>let</span> <span class='ident'>height</span> <span class='op'>=</span> <span class='number'>1</span> <span class='op'>+</span> <span class='ident'>i</span> <span class='op'>/</span> (<span class='ident'>n</span> <span class='op'>/</span> <span class='ident'>max_depth</span>);
-        <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='ident'>P</span>::<span class='ident'>rand</span>(<span class='ident'>NodeWeights</span>::<span class='ident'>fixed</span>(<span class='ident'>height</span> <span class='kw'>as</span> <span class='ident'>i32</span>), <span class='ident'>rng</span>));
+<span class="doccomment">/// Generate a random population of size N.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Trees of various depths will be generated in a uniform fashion between</span>
+<span class="doccomment">/// 1 and `max_depth`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">random_population</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">RandNode</span><span class="op">+</span><span class="ident">Clone</span><span class="op">+</span><span class="ident">Sync</span>, <span class="ident">F</span>: <span class="ident">Fitness</span><span class="op">+</span><span class="ident">Sized</span><span class="op">+</span><span class="ident">Send</span>, <span class="ident">R</span>: <span class="ident">Rng</span><span class="op">&gt;</span>(<span class="ident">n</span>: <span class="ident">usize</span>, <span class="ident">max_depth</span>: <span class="ident">usize</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">R</span>) <span class="op">-&gt;</span> <span class="ident">Population</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="ident">Population</span>::<span class="ident">new</span>(<span class="ident">n</span>, <span class="number">0</span>);
+    <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">n</span> {
+        <span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="number">1</span> <span class="op">+</span> <span class="ident">i</span> <span class="op">/</span> (<span class="ident">n</span> <span class="op">/</span> <span class="ident">max_depth</span>);
+        <span class="ident">ret</span>.<span class="ident">add</span>(<span class="ident">P</span>::<span class="ident">rand</span>(<span class="ident">NodeWeights</span>::<span class="ident">fixed</span>(<span class="ident">height</span> <span class="kw">as</span> <span class="ident">i32</span>), <span class="ident">rng</span>));
     }
-    <span class='ident'>ret</span>
+    <span class="ident">ret</span>
 }
 
-<span class='doccomment'>/// Take the best fraction of the population and fill back up to N with random</span>
-<span class='doccomment'>/// programs.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>retain_best</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span>, <span class='ident'>R</span><span class='op'>&gt;</span>(<span class='ident'>frac</span>: <span class='ident'>Number</span>, <span class='ident'>pop</span>: <span class='ident'>Population</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span><span class='op'>&gt;</span>, <span class='ident'>max_depth</span>: <span class='ident'>usize</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>R</span>) <span class='op'>-&gt;</span> <span class='ident'>Population</span><span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>F</span><span class='op'>&gt;</span>
-    <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>RandNode</span><span class='op'>+</span><span class='ident'>Clone</span><span class='op'>+</span><span class='ident'>Sync</span><span class='op'>+</span><span class='ident'>Encodable</span>,
-          <span class='ident'>F</span>: <span class='ident'>Fitness</span><span class='op'>+</span><span class='ident'>Sized</span><span class='op'>+</span><span class='ident'>Send</span><span class='op'>+</span><span class='ident'>Encodable</span>,
-          <span class='ident'>R</span>: <span class='ident'>Rng</span>
+<span class="doccomment">/// Take the best fraction of the population and fill back up to N with random</span>
+<span class="doccomment">/// programs.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">retain_best</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">frac</span>: <span class="ident">Number</span>, <span class="ident">pop</span>: <span class="ident">Population</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span><span class="op">&gt;</span>, <span class="ident">max_depth</span>: <span class="ident">usize</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">R</span>) <span class="op">-&gt;</span> <span class="ident">Population</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">F</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">P</span>: <span class="ident">RandNode</span><span class="op">+</span><span class="ident">Clone</span><span class="op">+</span><span class="ident">Sync</span><span class="op">+</span><span class="ident">Encodable</span>,
+          <span class="ident">F</span>: <span class="ident">Fitness</span><span class="op">+</span><span class="ident">Sized</span><span class="op">+</span><span class="ident">Send</span><span class="op">+</span><span class="ident">Encodable</span>,
+          <span class="ident">R</span>: <span class="ident">Rng</span>
 {
-    <span class='kw'>let</span> <span class='ident'>n</span> <span class='op'>=</span> (<span class='ident'>pop</span>.<span class='ident'>n</span>() <span class='kw'>as</span> <span class='ident'>Number</span> <span class='op'>*</span> <span class='ident'>frac</span>) <span class='kw'>as</span> <span class='ident'>usize</span>;
-    <span class='kw'>let</span> <span class='ident'>filler</span> <span class='op'>=</span> <span class='ident'>pop</span>.<span class='ident'>n</span>() <span class='op'>-</span> <span class='ident'>n</span>;
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='ident'>Population</span>::<span class='ident'>new</span>(<span class='ident'>n</span>, <span class='number'>0</span>);
-    <span class='ident'>ret</span>.<span class='ident'>generation</span> <span class='op'>=</span> <span class='ident'>pop</span>.<span class='ident'>generation</span> <span class='op'>+</span> <span class='number'>1</span>;
+    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> (<span class="ident">pop</span>.<span class="ident">n</span>() <span class="kw">as</span> <span class="ident">Number</span> <span class="op">*</span> <span class="ident">frac</span>) <span class="kw">as</span> <span class="ident">usize</span>;
+    <span class="kw">let</span> <span class="ident">filler</span> <span class="op">=</span> <span class="ident">pop</span>.<span class="ident">n</span>() <span class="op">-</span> <span class="ident">n</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="ident">Population</span>::<span class="ident">new</span>(<span class="ident">n</span>, <span class="number">0</span>);
+    <span class="ident">ret</span>.<span class="ident">generation</span> <span class="op">=</span> <span class="ident">pop</span>.<span class="ident">generation</span> <span class="op">+</span> <span class="number">1</span>;
 
-    <span class='kw'>for</span> <span class='ident'>c</span> <span class='kw'>in</span> <span class='ident'>pop</span>.<span class='ident'>best_n</span>(<span class='ident'>n</span>) {
-        <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='ident'>c</span>);
+    <span class="kw">for</span> <span class="ident">c</span> <span class="kw">in</span> <span class="ident">pop</span>.<span class="ident">best_n</span>(<span class="ident">n</span>) {
+        <span class="ident">ret</span>.<span class="ident">add</span>(<span class="ident">c</span>);
     }
 
-    <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='ident'>filler</span> {
-        <span class='kw'>let</span> <span class='ident'>height</span> <span class='op'>=</span> <span class='number'>1</span> <span class='op'>+</span> <span class='ident'>i</span> <span class='op'>/</span> (<span class='ident'>filler</span> <span class='op'>/</span> <span class='ident'>max_depth</span>);
-        <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='ident'>P</span>::<span class='ident'>rand</span>(<span class='ident'>NodeWeights</span>::<span class='ident'>fixed</span>(<span class='ident'>height</span> <span class='kw'>as</span> <span class='ident'>i32</span>), <span class='ident'>rng</span>));
+    <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">filler</span> {
+        <span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="number">1</span> <span class="op">+</span> <span class="ident">i</span> <span class="op">/</span> (<span class="ident">filler</span> <span class="op">/</span> <span class="ident">max_depth</span>);
+        <span class="ident">ret</span>.<span class="ident">add</span>(<span class="ident">P</span>::<span class="ident">rand</span>(<span class="ident">NodeWeights</span>::<span class="ident">fixed</span>(<span class="ident">height</span> <span class="kw">as</span> <span class="ident">i32</span>), <span class="ident">rng</span>));
     }
-    <span class='ident'>ret</span>
+    <span class="ident">ret</span>
 }
 
-<span class='doccomment'>/// Weights to use when deciding between internal and leaf nodes.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// This structure is initialized with a desired target depth, and</span>
-<span class='doccomment'>/// every level advancing in the tree shifts the weights away from</span>
-<span class='doccomment'>/// internal nodes and towards leaf nodes.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>,<span class='ident'>Clone</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>NodeWeights</span> {
-    <span class='ident'>current_level</span>: <span class='ident'>i32</span>,
-    <span class='ident'>per_level</span>: <span class='ident'>i32</span>
+<span class="doccomment">/// Weights to use when deciding between internal and leaf nodes.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This structure is initialized with a desired target depth, and</span>
+<span class="doccomment">/// every level advancing in the tree shifts the weights away from</span>
+<span class="doccomment">/// internal nodes and towards leaf nodes.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>,<span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NodeWeights</span> {
+    <span class="ident">current_level</span>: <span class="ident">i32</span>,
+    <span class="ident">per_level</span>: <span class="ident">i32</span>
 }
 
-<span class='kw'>impl</span> <span class='ident'>NodeWeights</span> {
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>fixed</span>(<span class='ident'>target_height</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='ident'>NodeWeights</span> {
-        <span class='ident'>NodeWeights</span> {
-            <span class='ident'>current_level</span>: <span class='number'>0</span>,
-            <span class='ident'>per_level</span>: <span class='number'>100</span> <span class='op'>/</span> <span class='ident'>max</span>(<span class='ident'>target_height</span> <span class='op'>-</span> <span class='number'>1</span>, <span class='number'>1</span>)
+<span class="kw">impl</span> <span class="ident">NodeWeights</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fixed</span>(<span class="ident">target_height</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="ident">NodeWeights</span> {
+        <span class="ident">NodeWeights</span> {
+            <span class="ident">current_level</span>: <span class="number">0</span>,
+            <span class="ident">per_level</span>: <span class="number">100</span> <span class="op">/</span> <span class="ident">max</span>(<span class="ident">target_height</span> <span class="op">-</span> <span class="number">1</span>, <span class="number">1</span>)
         }
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>randomized</span>(<span class='ident'>max_height</span>: <span class='ident'>i32</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Rng</span>) <span class='op'>-&gt;</span> <span class='ident'>NodeWeights</span> {
-        <span class='ident'>NodeWeights</span>::<span class='ident'>fixed</span>(<span class='number'>1</span> <span class='op'>+</span> <span class='ident'>rng</span>.<span class='ident'>next_u32</span>() <span class='kw'>as</span> <span class='ident'>i32</span> <span class='op'>%</span> (<span class='ident'>max_height</span> <span class='op'>-</span> <span class='number'>1</span>))
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">randomized</span>(<span class="ident">max_height</span>: <span class="ident">i32</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Rng</span>) <span class="op">-&gt;</span> <span class="ident">NodeWeights</span> {
+        <span class="ident">NodeWeights</span>::<span class="ident">fixed</span>(<span class="number">1</span> <span class="op">+</span> <span class="ident">rng</span>.<span class="ident">next_u32</span>() <span class="kw">as</span> <span class="ident">i32</span> <span class="op">%</span> (<span class="ident">max_height</span> <span class="op">-</span> <span class="number">1</span>))
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>internal</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span> {
-        <span class='ident'>max</span>(<span class='number'>100</span> <span class='op'>-</span> <span class='self'>self</span>.<span class='ident'>per_level</span> <span class='op'>*</span> <span class='self'>self</span>.<span class='ident'>current_level</span>, <span class='ident'>MIN_WEIGHT</span>) <span class='kw'>as</span> <span class='ident'>u32</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">internal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+        <span class="ident">max</span>(<span class="number">100</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">per_level</span> <span class="op">*</span> <span class="self">self</span>.<span class="ident">current_level</span>, <span class="ident">MIN_WEIGHT</span>) <span class="kw">as</span> <span class="ident">u32</span>
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>leaf</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span> {
-        <span class='ident'>max</span>(<span class='self'>self</span>.<span class='ident'>per_level</span> <span class='op'>*</span> <span class='self'>self</span>.<span class='ident'>current_level</span>, <span class='ident'>MIN_WEIGHT</span>) <span class='kw'>as</span> <span class='ident'>u32</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">leaf</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+        <span class="ident">max</span>(<span class="self">self</span>.<span class="ident">per_level</span> <span class="op">*</span> <span class="self">self</span>.<span class="ident">current_level</span>, <span class="ident">MIN_WEIGHT</span>) <span class="kw">as</span> <span class="ident">u32</span>
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>next_level</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>NodeWeights</span> {
-        <span class='ident'>NodeWeights</span> { <span class='ident'>current_level</span>: <span class='self'>self</span>.<span class='ident'>current_level</span> <span class='op'>+</span> <span class='number'>1</span>, <span class='ident'>per_level</span>: <span class='self'>self</span>.<span class='ident'>per_level</span> }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_level</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">NodeWeights</span> {
+        <span class="ident">NodeWeights</span> { <span class="ident">current_level</span>: <span class="self">self</span>.<span class="ident">current_level</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">per_level</span>: <span class="self">self</span>.<span class="ident">per_level</span> }
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>gen_child</span><span class='op'>&lt;</span><span class='ident'>P</span>: <span class='ident'>RandNode</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Rng</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span> {
-        <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>P</span>::<span class='ident'>rand</span>(<span class='self'>self</span>.<span class='ident'>next_level</span>(), <span class='ident'>rng</span>))
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gen_child</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">RandNode</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Rng</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">P</span>::<span class="ident">rand</span>(<span class="self">self</span>.<span class="ident">next_level</span>(), <span class="ident">rng</span>))
     }
 }
 
-<span class='doccomment'>/// Minimum weight</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// We need at least some weight, in case we need to make a leaf node</span>
-<span class='doccomment'>/// but only internal nodes are available at that point in the tree.</span>
-<span class='kw'>const</span> <span class='ident'>MIN_WEIGHT</span> : <span class='ident'>i32</span> <span class='op'>=</span> <span class='number'>1</span>;
+<span class="doccomment">/// Minimum weight</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// We need at least some weight, in case we need to make a leaf node</span>
+<span class="doccomment">/// but only internal nodes are available at that point in the tree.</span>
+<span class="kw">const</span> <span class="ident">MIN_WEIGHT</span> : <span class="ident">i32</span> <span class="op">=</span> <span class="number">1</span>;
 
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>tests</span> {
-    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw-2'>*</span>;
-    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::{<span class='ident'>num</span>, <span class='ident'>Number</span>, <span class='ident'>depth</span>};
-    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::<span class='ident'>genetic</span>::<span class='ident'>mutate_tree</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::{<span class="ident">num</span>, <span class="ident">Number</span>, <span class="ident">depth</span>};
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">genetic</span>::<span class="ident">mutate_tree</span>;
 
-    <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>)]</span>
-    <span class='kw'>enum</span> <span class='ident'>List</span> {
-        <span class='ident'>Cons</span>(<span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>List</span><span class='op'>&gt;</span>),
-        <span class='ident'>Nil</span>
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+    <span class="kw">enum</span> <span class="ident">List</span> {
+        <span class="ident">Cons</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">List</span><span class="op">&gt;</span>),
+        <span class="ident">Nil</span>
     }
 
-    <span class='macro'>impl_astnode</span><span class='macro'>!</span>(<span class='ident'>List</span>, <span class='number'>0</span>,
-                  <span class='ident'>int</span> <span class='ident'>Cons</span>(<span class='ident'>next</span>),
-                  <span class='ident'>leaf</span> <span class='ident'>Nil</span>());
+    <span class="macro">impl_astnode</span><span class="macro">!</span>(<span class="ident">List</span>, <span class="number">0</span>,
+                  <span class="ident">int</span> <span class="ident">Cons</span>(<span class="ident">next</span>),
+                  <span class="ident">leaf</span> <span class="ident">Nil</span>());
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_node_heights_on_generation</span>() {
-        <span class='kw'>let</span> <span class='ident'>target_height</span> <span class='op'>=</span> <span class='number'>8</span>;
-        <span class='kw'>let</span> <span class='ident'>n</span> <span class='op'>=</span> <span class='number'>1000</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>rng</span> <span class='op'>=</span> ::<span class='ident'>rand</span>::<span class='ident'>StdRng</span>::<span class='ident'>new</span>().<span class='ident'>unwrap</span>();
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_node_heights_on_generation</span>() {
+        <span class="kw">let</span> <span class="ident">target_height</span> <span class="op">=</span> <span class="number">8</span>;
+        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="number">1000</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> ::<span class="ident">rand</span>::<span class="ident">StdRng</span>::<span class="ident">new</span>().<span class="ident">unwrap</span>();
 
-        <span class='kw'>let</span> <span class='ident'>weights</span> <span class='op'>=</span> <span class='ident'>NodeWeights</span>::<span class='ident'>fixed</span>(<span class='ident'>target_height</span>);
-        <span class='kw'>let</span> <span class='ident'>programs</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>List</span><span class='op'>&gt;</span> <span class='op'>=</span> (<span class='number'>0</span>..<span class='ident'>n</span>).<span class='ident'>map</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>RandNode</span>::<span class='ident'>rand</span>(<span class='ident'>weights</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>rng</span>)).<span class='ident'>collect</span>();
-        <span class='kw'>let</span> <span class='ident'>avg_height</span> <span class='op'>=</span> <span class='ident'>num</span>::<span class='ident'>sum</span>(<span class='ident'>programs</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>p</span><span class='op'>|</span> <span class='ident'>depth</span>(<span class='ident'>p</span>) <span class='kw'>as</span> <span class='ident'>Number</span>)) <span class='op'>/</span> <span class='ident'>n</span> <span class='kw'>as</span> <span class='ident'>Number</span>;
+        <span class="kw">let</span> <span class="ident">weights</span> <span class="op">=</span> <span class="ident">NodeWeights</span>::<span class="ident">fixed</span>(<span class="ident">target_height</span>);
+        <span class="kw">let</span> <span class="ident">programs</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">List</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">n</span>).<span class="ident">map</span>(<span class="op">|</span>_<span class="op">|</span> <span class="ident">RandNode</span>::<span class="ident">rand</span>(<span class="ident">weights</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>)).<span class="ident">collect</span>();
+        <span class="kw">let</span> <span class="ident">avg_height</span> <span class="op">=</span> <span class="ident">num</span>::<span class="ident">sum</span>(<span class="ident">programs</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">depth</span>(<span class="ident">p</span>) <span class="kw">as</span> <span class="ident">Number</span>)) <span class="op">/</span> <span class="ident">n</span> <span class="kw">as</span> <span class="ident">Number</span>;
 
-        <span class='comment'>// Since we have uniform distribution of heights, the average will be about 0.5</span>
-        <span class='comment'>// times the max height. Some fudge margin for randomness.</span>
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>avg_height</span> <span class='op'>&lt;=</span> <span class='number'>0.6</span> <span class='op'>*</span> <span class='ident'>target_height</span> <span class='kw'>as</span> <span class='ident'>Number</span>);
+        <span class="comment">// Since we have uniform distribution of heights, the average will be about 0.5</span>
+        <span class="comment">// times the max height. Some fudge margin for randomness.</span>
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">avg_height</span> <span class="op">&lt;=</span> <span class="number">0.6</span> <span class="op">*</span> <span class="ident">target_height</span> <span class="kw">as</span> <span class="ident">Number</span>);
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_node_heights_during_mutation</span>() {
-        <span class='comment'>// Check that during mutation, the program doesn&#39;t grow endlessly</span>
-        <span class='kw'>let</span> <span class='ident'>n</span> <span class='op'>=</span> <span class='number'>1000</span>;
-        <span class='kw'>let</span> <span class='ident'>target_height</span> <span class='op'>=</span> <span class='number'>8</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>rng</span> <span class='op'>=</span> ::<span class='ident'>rand</span>::<span class='ident'>StdRng</span>::<span class='ident'>new</span>().<span class='ident'>unwrap</span>();
-        <span class='kw'>let</span> <span class='ident'>weights</span> <span class='op'>=</span> <span class='ident'>NodeWeights</span>::<span class='ident'>fixed</span>(<span class='ident'>target_height</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_node_heights_during_mutation</span>() {
+        <span class="comment">// Check that during mutation, the program doesn&#39;t grow endlessly</span>
+        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="number">1000</span>;
+        <span class="kw">let</span> <span class="ident">target_height</span> <span class="op">=</span> <span class="number">8</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> ::<span class="ident">rand</span>::<span class="ident">StdRng</span>::<span class="ident">new</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">weights</span> <span class="op">=</span> <span class="ident">NodeWeights</span>::<span class="ident">fixed</span>(<span class="ident">target_height</span>);
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>program</span> : <span class='ident'>List</span> <span class='op'>=</span> <span class='ident'>RandNode</span>::<span class='ident'>rand</span>(<span class='ident'>weights</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>rng</span>);
-        <span class='kw'>for</span> _ <span class='kw'>in</span> <span class='number'>0</span>..<span class='ident'>n</span> {
-            <span class='ident'>program</span> <span class='op'>=</span> <span class='kw-2'>*</span><span class='ident'>mutate_tree</span>(<span class='kw-2'>&amp;</span><span class='ident'>program</span>, <span class='ident'>target_height</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>rng</span>);
-            <span class='kw'>let</span> <span class='ident'>depth</span> <span class='op'>=</span> <span class='ident'>depth</span>(<span class='kw-2'>&amp;</span><span class='ident'>program</span>);
-            <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Depth: {}&quot;</span>, <span class='ident'>depth</span>);
-            <span class='comment'>// Check that we didn&#39;t grow too large, plus a fudge factor</span>
-            <span class='macro'>assert</span><span class='macro'>!</span>((<span class='ident'>depth</span> <span class='kw'>as</span> <span class='ident'>Number</span>) <span class='op'>&lt;</span> <span class='ident'>target_height</span> <span class='kw'>as</span> <span class='ident'>Number</span> <span class='op'>*</span> <span class='number'>1.5</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">program</span> : <span class="ident">List</span> <span class="op">=</span> <span class="ident">RandNode</span>::<span class="ident">rand</span>(<span class="ident">weights</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>);
+        <span class="kw">for</span> _ <span class="kw">in</span> <span class="number">0</span>..<span class="ident">n</span> {
+            <span class="ident">program</span> <span class="op">=</span> <span class="kw-2">*</span><span class="ident">mutate_tree</span>(<span class="kw-2">&amp;</span><span class="ident">program</span>, <span class="ident">target_height</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>);
+            <span class="kw">let</span> <span class="ident">depth</span> <span class="op">=</span> <span class="ident">depth</span>(<span class="kw-2">&amp;</span><span class="ident">program</span>);
+            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Depth: {}&quot;</span>, <span class="ident">depth</span>);
+            <span class="comment">// Check that we didn&#39;t grow too large, plus a fudge factor</span>
+            <span class="macro">assert</span><span class="macro">!</span>((<span class="ident">depth</span> <span class="kw">as</span> <span class="ident">Number</span>) <span class="op">&lt;</span> <span class="ident">target_height</span> <span class="kw">as</span> <span class="ident">Number</span> <span class="op">*</span> <span class="number">1.5</span>);
         }
     }
 }

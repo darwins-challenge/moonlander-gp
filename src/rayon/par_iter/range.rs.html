@@ -134,98 +134,98 @@
 <span id="89">89</span>
 <span id="90">90</span>
 <span id="91">91</span>
-</pre><pre class='rust '>
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw-2'>*</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>internal</span>::<span class='kw-2'>*</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Range</span>;
+</pre><pre class="rust ">
+<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">internal</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Range</span>;
 
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>RangeIter</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
-    <span class='ident'>range</span>: <span class='ident'>Range</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RangeIter</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 }
 
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>range_impl</span> {
-    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span> ) <span class='op'>=&gt;</span> {
-        <span class='kw'>impl</span> <span class='ident'>IntoParallelIterator</span> <span class='kw'>for</span> <span class='ident'>Range</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span> {
-            <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>;
-            <span class='kw'>type</span> <span class='ident'>Iter</span> <span class='op'>=</span> <span class='ident'>RangeIter</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span>;
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">range_impl</span> {
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> ) <span class="op">=&gt;</span> {
+        <span class="kw">impl</span> <span class="ident">IntoParallelIterator</span> <span class="kw">for</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> {
+            <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>;
+            <span class="kw">type</span> <span class="ident">Iter</span> <span class="op">=</span> <span class="ident">RangeIter</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span>;
 
-            <span class='kw'>fn</span> <span class='ident'>into_par_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>::<span class='ident'>Iter</span> {
-                <span class='ident'>RangeIter</span> { <span class='ident'>range</span>: <span class='self'>self</span> }
+            <span class="kw">fn</span> <span class="ident">into_par_iter</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Iter</span> {
+                <span class="ident">RangeIter</span> { <span class="ident">range</span>: <span class="self">self</span> }
             }
         }
 
-        <span class='kw'>impl</span> <span class='ident'>ParallelIterator</span> <span class='kw'>for</span> <span class='ident'>RangeIter</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span> {
-            <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>;
+        <span class="kw">impl</span> <span class="ident">ParallelIterator</span> <span class="kw">for</span> <span class="ident">RangeIter</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> {
+            <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>;
 
-            <span class='kw'>fn</span> <span class='ident'>drive_unindexed</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>consumer</span>: <span class='ident'>C</span>) <span class='op'>-&gt;</span> <span class='ident'>C</span>::<span class='prelude-ty'>Result</span>
-                <span class='kw'>where</span> <span class='ident'>C</span>: <span class='ident'>UnindexedConsumer</span><span class='op'>&lt;</span><span class='self'>Self</span>::<span class='ident'>Item</span><span class='op'>&gt;</span>
+            <span class="kw">fn</span> <span class="ident">drive_unindexed</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">consumer</span>: <span class="ident">C</span>) <span class="op">-&gt;</span> <span class="ident">C</span>::<span class="prelude-ty">Result</span>
+                <span class="kw">where</span> <span class="ident">C</span>: <span class="ident">UnindexedConsumer</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span>
             {
-                <span class='ident'>bridge</span>(<span class='self'>self</span>, <span class='ident'>consumer</span>)
+                <span class="ident">bridge</span>(<span class="self">self</span>, <span class="ident">consumer</span>)
             }
         }
 
-        <span class='kw'>impl</span> <span class='ident'>BoundedParallelIterator</span> <span class='kw'>for</span> <span class='ident'>RangeIter</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span> {
-            <span class='kw'>fn</span> <span class='ident'>upper_bound</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-                <span class='ident'>ExactParallelIterator</span>::<span class='ident'>len</span>(<span class='self'>self</span>)
+        <span class="kw">impl</span> <span class="ident">BoundedParallelIterator</span> <span class="kw">for</span> <span class="ident">RangeIter</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">upper_bound</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+                <span class="ident">ExactParallelIterator</span>::<span class="ident">len</span>(<span class="self">self</span>)
             }
 
-            <span class='kw'>fn</span> <span class='ident'>drive</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>consumer</span>: <span class='ident'>C</span>) <span class='op'>-&gt;</span> <span class='ident'>C</span>::<span class='prelude-ty'>Result</span>
-                <span class='kw'>where</span> <span class='ident'>C</span>: <span class='ident'>Consumer</span><span class='op'>&lt;</span><span class='self'>Self</span>::<span class='ident'>Item</span><span class='op'>&gt;</span>
+            <span class="kw">fn</span> <span class="ident">drive</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">consumer</span>: <span class="ident">C</span>) <span class="op">-&gt;</span> <span class="ident">C</span>::<span class="prelude-ty">Result</span>
+                <span class="kw">where</span> <span class="ident">C</span>: <span class="ident">Consumer</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span>
             {
-                <span class='ident'>bridge</span>(<span class='self'>self</span>, <span class='ident'>consumer</span>)
+                <span class="ident">bridge</span>(<span class="self">self</span>, <span class="ident">consumer</span>)
             }
         }
 
-        <span class='kw'>impl</span> <span class='ident'>ExactParallelIterator</span> <span class='kw'>for</span> <span class='ident'>RangeIter</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span> {
-            <span class='kw'>fn</span> <span class='ident'>len</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-                <span class='self'>self</span>.<span class='ident'>range</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>usize</span>
+        <span class="kw">impl</span> <span class="ident">ExactParallelIterator</span> <span class="kw">for</span> <span class="ident">RangeIter</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+                <span class="self">self</span>.<span class="ident">range</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">usize</span>
             }
         }
 
-        <span class='kw'>impl</span> <span class='ident'>IndexedParallelIterator</span> <span class='kw'>for</span> <span class='ident'>RangeIter</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span> {
-            <span class='kw'>fn</span> <span class='ident'>with_producer</span><span class='op'>&lt;</span><span class='ident'>CB</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>callback</span>: <span class='ident'>CB</span>) <span class='op'>-&gt;</span> <span class='ident'>CB</span>::<span class='ident'>Output</span>
-                <span class='kw'>where</span> <span class='ident'>CB</span>: <span class='ident'>ProducerCallback</span><span class='op'>&lt;</span><span class='self'>Self</span>::<span class='ident'>Item</span><span class='op'>&gt;</span>
+        <span class="kw">impl</span> <span class="ident">IndexedParallelIterator</span> <span class="kw">for</span> <span class="ident">RangeIter</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">with_producer</span><span class="op">&lt;</span><span class="ident">CB</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">CB</span>) <span class="op">-&gt;</span> <span class="ident">CB</span>::<span class="ident">Output</span>
+                <span class="kw">where</span> <span class="ident">CB</span>: <span class="ident">ProducerCallback</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span>
             {
-                <span class='ident'>callback</span>.<span class='ident'>callback</span>(<span class='self'>self</span>)
+                <span class="ident">callback</span>.<span class="ident">callback</span>(<span class="self">self</span>)
             }
         }
 
-        <span class='kw'>impl</span> <span class='ident'>Producer</span> <span class='kw'>for</span> <span class='ident'>RangeIter</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span> {
-            <span class='kw'>fn</span> <span class='ident'>cost</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>len</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>f64</span> {
-                <span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>f64</span>
+        <span class="kw">impl</span> <span class="ident">Producer</span> <span class="kw">for</span> <span class="ident">RangeIter</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">cost</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">f64</span> {
+                <span class="ident">len</span> <span class="kw">as</span> <span class="ident">f64</span>
             }
 
-            <span class='kw'>fn</span> <span class='ident'>split_at</span>(<span class='self'>self</span>, <span class='ident'>index</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> (<span class='self'>Self</span>, <span class='self'>Self</span>) {
-                <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>index</span> <span class='op'>&lt;=</span> <span class='self'>self</span>.<span class='ident'>range</span>.<span class='ident'>len</span>());
-                <span class='comment'>// For signed $t, the length and requested index could be greater than $t::MAX, and</span>
-                <span class='comment'>// then `index as $t` could wrap to negative, so wrapping_add is necessary.</span>
-                <span class='kw'>let</span> <span class='ident'>mid</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>range</span>.<span class='ident'>start</span>.<span class='ident'>wrapping_add</span>(<span class='ident'>index</span> <span class='kw'>as</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>);
-                <span class='kw'>let</span> <span class='ident'>left</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>range</span>.<span class='ident'>start</span> .. <span class='ident'>mid</span>;
-                <span class='kw'>let</span> <span class='ident'>right</span> <span class='op'>=</span> <span class='ident'>mid</span> .. <span class='self'>self</span>.<span class='ident'>range</span>.<span class='ident'>end</span>;
-                (<span class='ident'>RangeIter</span> { <span class='ident'>range</span>: <span class='ident'>left</span> }, <span class='ident'>RangeIter</span> { <span class='ident'>range</span>: <span class='ident'>right</span> })
+            <span class="kw">fn</span> <span class="ident">split_at</span>(<span class="self">self</span>, <span class="ident">index</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> (<span class="self">Self</span>, <span class="self">Self</span>) {
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">index</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">range</span>.<span class="ident">len</span>());
+                <span class="comment">// For signed $t, the length and requested index could be greater than $t::MAX, and</span>
+                <span class="comment">// then `index as $t` could wrap to negative, so wrapping_add is necessary.</span>
+                <span class="kw">let</span> <span class="ident">mid</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">range</span>.<span class="ident">start</span>.<span class="ident">wrapping_add</span>(<span class="ident">index</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>);
+                <span class="kw">let</span> <span class="ident">left</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">range</span>.<span class="ident">start</span> .. <span class="ident">mid</span>;
+                <span class="kw">let</span> <span class="ident">right</span> <span class="op">=</span> <span class="ident">mid</span> .. <span class="self">self</span>.<span class="ident">range</span>.<span class="ident">end</span>;
+                (<span class="ident">RangeIter</span> { <span class="ident">range</span>: <span class="ident">left</span> }, <span class="ident">RangeIter</span> { <span class="ident">range</span>: <span class="ident">right</span> })
             }
         }
 
-        <span class='kw'>impl</span> <span class='ident'>IntoIterator</span> <span class='kw'>for</span> <span class='ident'>RangeIter</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span> {
-            <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>;
-            <span class='kw'>type</span> <span class='ident'>IntoIter</span> <span class='op'>=</span> <span class='ident'>Range</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span><span class='op'>&gt;</span>;
+        <span class="kw">impl</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="ident">RangeIter</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> {
+            <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>;
+            <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span>;
 
-            <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>::<span class='ident'>IntoIter</span> {
-                <span class='self'>self</span>.<span class='ident'>range</span>
+            <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">IntoIter</span> {
+                <span class="self">self</span>.<span class="ident">range</span>
             }
         }
     }
 }
 
-<span class='comment'>// all Range&lt;T&gt; with ExactSizeIterator</span>
-<span class='macro'>range_impl</span><span class='macro'>!</span>{<span class='ident'>u8</span>}
-<span class='macro'>range_impl</span><span class='macro'>!</span>{<span class='ident'>u16</span>}
-<span class='macro'>range_impl</span><span class='macro'>!</span>{<span class='ident'>u32</span>}
-<span class='macro'>range_impl</span><span class='macro'>!</span>{<span class='ident'>usize</span>}
-<span class='macro'>range_impl</span><span class='macro'>!</span>{<span class='ident'>i8</span>}
-<span class='macro'>range_impl</span><span class='macro'>!</span>{<span class='ident'>i16</span>}
-<span class='macro'>range_impl</span><span class='macro'>!</span>{<span class='ident'>i32</span>}
-<span class='macro'>range_impl</span><span class='macro'>!</span>{<span class='ident'>isize</span>}
+<span class="comment">// all Range&lt;T&gt; with ExactSizeIterator</span>
+<span class="macro">range_impl</span><span class="macro">!</span>{<span class="ident">u8</span>}
+<span class="macro">range_impl</span><span class="macro">!</span>{<span class="ident">u16</span>}
+<span class="macro">range_impl</span><span class="macro">!</span>{<span class="ident">u32</span>}
+<span class="macro">range_impl</span><span class="macro">!</span>{<span class="ident">usize</span>}
+<span class="macro">range_impl</span><span class="macro">!</span>{<span class="ident">i8</span>}
+<span class="macro">range_impl</span><span class="macro">!</span>{<span class="ident">i16</span>}
+<span class="macro">range_impl</span><span class="macro">!</span>{<span class="ident">i32</span>}
+<span class="macro">range_impl</span><span class="macro">!</span>{<span class="ident">isize</span>}
 </pre>
 </section>
     <section id='search' class="content hidden"></section>

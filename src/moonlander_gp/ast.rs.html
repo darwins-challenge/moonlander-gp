@@ -271,233 +271,233 @@
 <span id="226">226</span>
 <span id="227">227</span>
 <span id="228">228</span>
-</pre><pre class='rust '>
-<span class='kw'>use</span> <span class='ident'>downcast</span>::<span class='ident'>Any</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>rc</span>::<span class='ident'>Rc</span>;
-<span class='kw'>use</span> <span class='ident'>rand</span>::<span class='ident'>Rng</span>;
+</pre><pre class="rust ">
+<span class="kw">use</span> <span class="ident">downcast</span>::<span class="ident">Any</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
+<span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
 
-<span class='comment'>//----------------------------------------------------------------------</span>
-<span class='comment'>// AST Traits</span>
+<span class="comment">//----------------------------------------------------------------------</span>
+<span class="comment">// AST Traits</span>
 
-<span class='doccomment'>/// Main trait to be implemented for AST node types</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>AstNode</span>: <span class='ident'>Any</span><span class='op'>+</span><span class='ident'>Mutatable</span><span class='op'>+</span><span class='ident'>Copyable</span><span class='op'>+</span><span class='ident'>Sync</span> {
-    <span class='doccomment'>/// Identify the node type, because Any::get_type_id() is unstable.</span>
-    <span class='kw'>fn</span> <span class='ident'>node_type</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span>;
+<span class="doccomment">/// Main trait to be implemented for AST node types</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AstNode</span>: <span class="ident">Any</span><span class="op">+</span><span class="ident">Mutatable</span><span class="op">+</span><span class="ident">Copyable</span><span class="op">+</span><span class="ident">Sync</span> {
+    <span class="doccomment">/// Identify the node type, because Any::get_type_id() is unstable.</span>
+    <span class="kw">fn</span> <span class="ident">node_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">usize</span>;
 
-    <span class='doccomment'>/// Return all children of this node.</span>
-    <span class='kw'>fn</span> <span class='ident'>children</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span>;
+    <span class="doccomment">/// Return all children of this node.</span>
+    <span class="kw">fn</span> <span class="ident">children</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">AstNode</span><span class="op">&gt;</span>;
 
-    <span class='doccomment'>/// Return a copy of this node with a single child node replaced.</span>
-    <span class='kw'>fn</span> <span class='ident'>replace_child</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>old_child</span>: <span class='kw-2'>&amp;</span><span class='ident'>AstNode</span>, <span class='ident'>new_child</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span>;
+    <span class="doccomment">/// Return a copy of this node with a single child node replaced.</span>
+    <span class="kw">fn</span> <span class="ident">replace_child</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">old_child</span>: <span class="kw-2">&amp;</span><span class="ident">AstNode</span>, <span class="ident">new_child</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span>;
 }
 
-<span class='macro'>impl_downcast</span><span class='macro'>!</span>(<span class='ident'>AstNode</span>);
-<span class='macro'>downcast_methods</span><span class='macro'>!</span>(<span class='ident'>AstNode</span>);
+<span class="macro">impl_downcast</span><span class="macro">!</span>(<span class="ident">AstNode</span>);
+<span class="macro">downcast_methods</span><span class="macro">!</span>(<span class="ident">AstNode</span>);
 
-<span class='doccomment'>/// Mutation trait for nodes</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Implement this if you want to do controlled mutation of nodes.  For example,</span>
-<span class='doccomment'>/// changing the node type without changing the children, or changing the number</span>
-<span class='doccomment'>/// value in a controlled way.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// When not explicitly specified, a default implementation is provided for</span>
-<span class='doccomment'>/// nodes that also implement `RandNode`, which completely replaces the node</span>
-<span class='doccomment'>/// with a random subtree.</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Mutatable</span> {
-    <span class='doccomment'>/// Return a mutation of this node</span>
-    <span class='kw'>fn</span> <span class='ident'>mutate</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>max_height</span>: <span class='ident'>i32</span>, <span class='ident'>rng</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Rng</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span>;
+<span class="doccomment">/// Mutation trait for nodes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Implement this if you want to do controlled mutation of nodes.  For example,</span>
+<span class="doccomment">/// changing the node type without changing the children, or changing the number</span>
+<span class="doccomment">/// value in a controlled way.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// When not explicitly specified, a default implementation is provided for</span>
+<span class="doccomment">/// nodes that also implement `RandNode`, which completely replaces the node</span>
+<span class="doccomment">/// with a random subtree.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Mutatable</span> {
+    <span class="doccomment">/// Return a mutation of this node</span>
+    <span class="kw">fn</span> <span class="ident">mutate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_height</span>: <span class="ident">i32</span>, <span class="ident">rng</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Rng</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span>;
 }
 
-<span class='doccomment'>/// Like `Clone`, but can be called on a trait object.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Used during crossover. Automatically implemented for every type that is also</span>
-<span class='doccomment'>/// `Clone`.</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Copyable</span> {
-    <span class='doccomment'>/// Like clone(), but unsized. Necessary during crossover.</span>
-    <span class='kw'>fn</span> <span class='ident'>copy</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span>;
+<span class="doccomment">/// Like `Clone`, but can be called on a trait object.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Used during crossover. Automatically implemented for every type that is also</span>
+<span class="doccomment">/// `Clone`.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Copyable</span> {
+    <span class="doccomment">/// Like clone(), but unsized. Necessary during crossover.</span>
+    <span class="kw">fn</span> <span class="ident">copy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span>;
 }
 
-<span class='doccomment'>/// Default implementation of Copyable for nodes that are Clone</span>
-<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Clone</span><span class='op'>+</span><span class='ident'>AstNode</span><span class='op'>&gt;</span> <span class='ident'>Copyable</span> <span class='kw'>for</span> <span class='ident'>T</span> {
-    <span class='kw'>fn</span> <span class='ident'>copy</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span> { <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='self'>self</span>.<span class='ident'>clone</span>()) }
+<span class="doccomment">/// Default implementation of Copyable for nodes that are Clone</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Clone</span><span class="op">+</span><span class="ident">AstNode</span><span class="op">&gt;</span> <span class="ident">Copyable</span> <span class="kw">for</span> <span class="ident">T</span> {
+    <span class="kw">fn</span> <span class="ident">copy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span> { <span class="ident">Box</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">clone</span>()) }
 }
 
-<span class='comment'>//----------------------------------------------------------------------</span>
-<span class='comment'>// AST Operations</span>
+<span class="comment">//----------------------------------------------------------------------</span>
+<span class="comment">// AST Operations</span>
 
-<span class='doccomment'>/// Return the depth of an AST tree.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>depth</span>(<span class='ident'>node</span>: <span class='kw-2'>&amp;</span><span class='ident'>AstNode</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-    <span class='number'>1</span> <span class='op'>+</span> <span class='ident'>node</span>.<span class='ident'>children</span>().<span class='ident'>into_iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>c</span><span class='op'>|</span> <span class='ident'>depth</span>(<span class='ident'>c</span>)).<span class='ident'>max</span>().<span class='ident'>unwrap_or</span>(<span class='number'>0</span>)
+<span class="doccomment">/// Return the depth of an AST tree.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">depth</span>(<span class="ident">node</span>: <span class="kw-2">&amp;</span><span class="ident">AstNode</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+    <span class="number">1</span> <span class="op">+</span> <span class="ident">node</span>.<span class="ident">children</span>().<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">depth</span>(<span class="ident">c</span>)).<span class="ident">max</span>().<span class="ident">unwrap_or</span>(<span class="number">0</span>)
 }
 
-<span class='doccomment'>/// A zipper-like structure pointing to a tree node, so a modified copy of the</span>
-<span class='doccomment'>/// tree can be reconstructed.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>NodeInTree</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-    <span class='kw'>pub</span> <span class='ident'>node</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>AstNode</span>,
-    <span class='kw'>pub</span> <span class='ident'>root_path</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Rc</span><span class='op'>&lt;</span><span class='ident'>NodeInTree</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span>
+<span class="doccomment">/// A zipper-like structure pointing to a tree node, so a modified copy of the</span>
+<span class="doccomment">/// tree can be reconstructed.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NodeInTree</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="ident">node</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">AstNode</span>,
+    <span class="kw">pub</span> <span class="ident">root_path</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">NodeInTree</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>
 }
 
-<span class='doccomment'>/// Return all nodes in a given AST tree.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>find_nodes_and_parents</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>root</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>AstNode</span>) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Rc</span><span class='op'>&lt;</span><span class='ident'>NodeInTree</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Rc</span><span class='op'>&lt;</span><span class='ident'>NodeInTree</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[];
-    <span class='ident'>result</span>.<span class='ident'>reserve</span>(<span class='number'>100</span>);  <span class='comment'>// Skip some resizes we have to do on medium-sized trees</span>
+<span class="doccomment">/// Return all nodes in a given AST tree.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_nodes_and_parents</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">root</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">AstNode</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">NodeInTree</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">NodeInTree</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[];
+    <span class="ident">result</span>.<span class="ident">reserve</span>(<span class="number">100</span>);  <span class="comment">// Skip some resizes we have to do on medium-sized trees</span>
 
-    <span class='kw'>let</span> <span class='ident'>current_root_path</span> <span class='op'>=</span> <span class='ident'>Rc</span>::<span class='ident'>new</span>(<span class='ident'>NodeInTree</span> { <span class='ident'>node</span>: <span class='ident'>root</span>, <span class='ident'>root_path</span>: <span class='prelude-val'>None</span> });
-    <span class='ident'>result</span>.<span class='ident'>push</span>(<span class='ident'>current_root_path</span>.<span class='ident'>clone</span>());
-    <span class='ident'>find_nodes_and_parents_into</span>(<span class='ident'>root</span>, <span class='kw-2'>&amp;</span><span class='ident'>current_root_path</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>result</span>);
+    <span class="kw">let</span> <span class="ident">current_root_path</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">NodeInTree</span> { <span class="ident">node</span>: <span class="ident">root</span>, <span class="ident">root_path</span>: <span class="prelude-val">None</span> });
+    <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">current_root_path</span>.<span class="ident">clone</span>());
+    <span class="ident">find_nodes_and_parents_into</span>(<span class="ident">root</span>, <span class="kw-2">&amp;</span><span class="ident">current_root_path</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>);
 
-    <span class='ident'>result</span>
+    <span class="ident">result</span>
 }
 
-<span class='kw'>fn</span> <span class='ident'>find_nodes_and_parents_into</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>parent</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>AstNode</span>,
-                               <span class='ident'>parent_root_path</span>: <span class='kw-2'>&amp;</span><span class='ident'>Rc</span><span class='op'>&lt;</span><span class='ident'>NodeInTree</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;&gt;</span>,
-                               <span class='ident'>acc</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Rc</span><span class='op'>&lt;</span><span class='ident'>NodeInTree</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span>) {
-    <span class='kw'>for</span> <span class='ident'>node</span> <span class='kw'>in</span> <span class='ident'>parent</span>.<span class='ident'>children</span>() {
-        <span class='kw'>let</span> <span class='ident'>current_root_path</span> <span class='op'>=</span> <span class='ident'>Rc</span>::<span class='ident'>new</span>(<span class='ident'>NodeInTree</span> { <span class='ident'>node</span>: <span class='ident'>node</span>.<span class='ident'>clone</span>(), <span class='ident'>root_path</span>: <span class='prelude-val'>Some</span>(<span class='ident'>parent_root_path</span>.<span class='ident'>clone</span>()) });
-        <span class='ident'>acc</span>.<span class='ident'>push</span>(<span class='ident'>current_root_path</span>.<span class='ident'>clone</span>());
-        <span class='ident'>find_nodes_and_parents_into</span>(<span class='ident'>node</span>, <span class='kw-2'>&amp;</span><span class='ident'>current_root_path</span>, <span class='ident'>acc</span>);
+<span class="kw">fn</span> <span class="ident">find_nodes_and_parents_into</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">parent</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">AstNode</span>,
+                               <span class="ident">parent_root_path</span>: <span class="kw-2">&amp;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">NodeInTree</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;&gt;</span>,
+                               <span class="ident">acc</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">NodeInTree</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>) {
+    <span class="kw">for</span> <span class="ident">node</span> <span class="kw">in</span> <span class="ident">parent</span>.<span class="ident">children</span>() {
+        <span class="kw">let</span> <span class="ident">current_root_path</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">NodeInTree</span> { <span class="ident">node</span>: <span class="ident">node</span>.<span class="ident">clone</span>(), <span class="ident">root_path</span>: <span class="prelude-val">Some</span>(<span class="ident">parent_root_path</span>.<span class="ident">clone</span>()) });
+        <span class="ident">acc</span>.<span class="ident">push</span>(<span class="ident">current_root_path</span>.<span class="ident">clone</span>());
+        <span class="ident">find_nodes_and_parents_into</span>(<span class="ident">node</span>, <span class="kw-2">&amp;</span><span class="ident">current_root_path</span>, <span class="ident">acc</span>);
     }
 }
 
-<span class='kw'>struct</span> <span class='ident'>TraitObject</span> {
-    <span class='kw'>pub</span> <span class='ident'>data</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> (),
-    <span class='kw'>pub</span> <span class='ident'>vtable</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> (),
+<span class="kw">struct</span> <span class="ident">TraitObject</span> {
+    <span class="kw">pub</span> <span class="ident">data</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> (),
+    <span class="kw">pub</span> <span class="ident">vtable</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> (),
 }
 
-<span class='doccomment'>/// Compare a real node and a node trait</span>
-<span class='kw'>fn</span> <span class='ident'>same_node</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>AstNode</span><span class='op'>&gt;</span>(<span class='ident'>node1</span>: <span class='kw-2'>&amp;</span><span class='ident'>T</span>, <span class='ident'>node2</span>: <span class='kw-2'>&amp;</span><span class='ident'>AstNode</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-    <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
-    <span class='kw'>unsafe</span> {
-        <span class='kw'>let</span> <span class='ident'>address</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span>() <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>node1</span>);
-        <span class='kw'>let</span> <span class='ident'>obj</span>: <span class='ident'>TraitObject</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>node2</span>);
-        <span class='ident'>address</span> <span class='op'>==</span> <span class='ident'>obj</span>.<span class='ident'>data</span>
+<span class="doccomment">/// Compare a real node and a node trait</span>
+<span class="kw">fn</span> <span class="ident">same_node</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AstNode</span><span class="op">&gt;</span>(<span class="ident">node1</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>, <span class="ident">node2</span>: <span class="kw-2">&amp;</span><span class="ident">AstNode</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
+    <span class="kw">unsafe</span> {
+        <span class="kw">let</span> <span class="ident">address</span>: <span class="kw-2">*</span><span class="kw-2">mut</span>() <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">node1</span>);
+        <span class="kw">let</span> <span class="ident">obj</span>: <span class="ident">TraitObject</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">node2</span>);
+        <span class="ident">address</span> <span class="op">==</span> <span class="ident">obj</span>.<span class="ident">data</span>
     }
 }
 
-<span class='doccomment'>/// Helper function for use inside `replace_children()`.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Call this for every child node in `replace_children()`. The new_child is a</span>
-<span class='doccomment'>/// `&amp;mut Option&lt;&gt;` so that we can be sure we consume it exactly once.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>clone_or_replace</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>AstNode</span><span class='op'>+</span><span class='ident'>Clone</span><span class='op'>&gt;</span>(<span class='ident'>child</span>: <span class='kw-2'>&amp;</span><span class='ident'>T</span>, <span class='ident'>old_child</span>: <span class='kw-2'>&amp;</span><span class='ident'>AstNode</span>, <span class='ident'>new_child</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
-    <span class='kw'>if</span> <span class='ident'>same_node</span>(<span class='ident'>child</span>, <span class='ident'>old_child</span>) {
-        <span class='ident'>new_child</span>.<span class='ident'>take</span>().<span class='ident'>unwrap</span>().<span class='ident'>downcast</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>().<span class='ident'>ok</span>().<span class='ident'>unwrap</span>()
-    } <span class='kw'>else</span> {
-        <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>child</span>.<span class='ident'>clone</span>())
+<span class="doccomment">/// Helper function for use inside `replace_children()`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Call this for every child node in `replace_children()`. The new_child is a</span>
+<span class="doccomment">/// `&amp;mut Option&lt;&gt;` so that we can be sure we consume it exactly once.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clone_or_replace</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AstNode</span><span class="op">+</span><span class="ident">Clone</span><span class="op">&gt;</span>(<span class="ident">child</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>, <span class="ident">old_child</span>: <span class="kw-2">&amp;</span><span class="ident">AstNode</span>, <span class="ident">new_child</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">same_node</span>(<span class="ident">child</span>, <span class="ident">old_child</span>) {
+        <span class="ident">new_child</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>().<span class="ident">downcast</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>()
+    } <span class="kw">else</span> {
+        <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">child</span>.<span class="ident">clone</span>())
     }
 }
 
-<span class='doccomment'>/// Return a copy of the entire tree, replacing the indicated node with another.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>replace_to_root</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>AstNode</span><span class='op'>&gt;</span>(<span class='ident'>nap</span>: <span class='kw-2'>&amp;</span><span class='ident'>Rc</span><span class='op'>&lt;</span><span class='ident'>NodeInTree</span><span class='op'>&gt;</span>, <span class='ident'>new_child</span>: <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>new_child_opt</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>new_child</span>);
-    <span class='ident'>do_replace_to_root</span>(<span class='ident'>nap</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>new_child_opt</span>)
+<span class="doccomment">/// Return a copy of the entire tree, replacing the indicated node with another.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">replace_to_root</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AstNode</span><span class="op">&gt;</span>(<span class="ident">nap</span>: <span class="kw-2">&amp;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">NodeInTree</span><span class="op">&gt;</span>, <span class="ident">new_child</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_child_opt</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">new_child</span>);
+    <span class="ident">do_replace_to_root</span>(<span class="ident">nap</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">new_child_opt</span>)
 }
 
-<span class='kw'>fn</span> <span class='ident'>do_replace_to_root</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>AstNode</span><span class='op'>&gt;</span>(<span class='ident'>nap</span>: <span class='kw-2'>&amp;</span><span class='ident'>Rc</span><span class='op'>&lt;</span><span class='ident'>NodeInTree</span><span class='op'>&gt;</span>, <span class='ident'>new_child</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
-    <span class='kw'>match</span> <span class='ident'>nap</span>.<span class='ident'>root_path</span> {
-        <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='ident'>new_child</span>.<span class='ident'>take</span>().<span class='ident'>unwrap</span>().<span class='ident'>downcast</span>().<span class='ident'>ok</span>().<span class='ident'>unwrap</span>(),
-        <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>parent</span>) <span class='op'>=&gt;</span> {
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>new_node</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>parent</span>.<span class='ident'>node</span>.<span class='ident'>replace_child</span>(<span class='ident'>nap</span>.<span class='ident'>node</span>, <span class='ident'>new_child</span>));
-            <span class='ident'>do_replace_to_root</span>(<span class='ident'>parent</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>new_node</span>)
+<span class="kw">fn</span> <span class="ident">do_replace_to_root</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AstNode</span><span class="op">&gt;</span>(<span class="ident">nap</span>: <span class="kw-2">&amp;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">NodeInTree</span><span class="op">&gt;</span>, <span class="ident">new_child</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">match</span> <span class="ident">nap</span>.<span class="ident">root_path</span> {
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">new_child</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>().<span class="ident">downcast</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>(),
+        <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">parent</span>) <span class="op">=&gt;</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_node</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">parent</span>.<span class="ident">node</span>.<span class="ident">replace_child</span>(<span class="ident">nap</span>.<span class="ident">node</span>, <span class="ident">new_child</span>));
+            <span class="ident">do_replace_to_root</span>(<span class="ident">parent</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">new_node</span>)
         }
     }
 }
 
-<span class='comment'>//----------------------------------------------------------------------</span>
-<span class='comment'>// Tests</span>
+<span class="comment">//----------------------------------------------------------------------</span>
+<span class="comment">// Tests</span>
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>tests</span> {
-    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw-2'>*</span>;
-    <span class='kw'>use</span> <span class='ident'>rand</span>::<span class='ident'>Rng</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
 
-    <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>,<span class='ident'>PartialEq</span>,<span class='ident'>Eq</span>,<span class='ident'>Debug</span>)]</span>
-    <span class='kw'>enum</span> <span class='ident'>TestNode</span> {
-        <span class='ident'>Leaf</span>(<span class='ident'>u32</span>),
-        <span class='ident'>Node</span>(<span class='ident'>u32</span>, <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>TestNode</span><span class='op'>&gt;</span>),
-        <span class='ident'>Two</span>(<span class='ident'>u32</span>, <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>TestNode</span><span class='op'>&gt;</span>, <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>TestNode</span><span class='op'>&gt;</span>)
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>,<span class="ident">PartialEq</span>,<span class="ident">Eq</span>,<span class="ident">Debug</span>)]</span>
+    <span class="kw">enum</span> <span class="ident">TestNode</span> {
+        <span class="ident">Leaf</span>(<span class="ident">u32</span>),
+        <span class="ident">Node</span>(<span class="ident">u32</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">TestNode</span><span class="op">&gt;</span>),
+        <span class="ident">Two</span>(<span class="ident">u32</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">TestNode</span><span class="op">&gt;</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">TestNode</span><span class="op">&gt;</span>)
     }
 
-    <span class='kw'>impl</span> <span class='ident'>AstNode</span> <span class='kw'>for</span> <span class='ident'>TestNode</span> {
-        <span class='kw'>fn</span> <span class='ident'>node_type</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> { <span class='number'>0</span> }
+    <span class="kw">impl</span> <span class="ident">AstNode</span> <span class="kw">for</span> <span class="ident">TestNode</span> {
+        <span class="kw">fn</span> <span class="ident">node_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> { <span class="number">0</span> }
 
-        <span class='kw'>fn</span> <span class='ident'>children</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span> {
-            <span class='kw'>match</span> <span class='kw-2'>*</span><span class='self'>self</span> {
-                <span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(_) <span class='op'>=&gt;</span> <span class='macro'>vec</span><span class='macro'>!</span>[],
-                <span class='ident'>TestNode</span>::<span class='ident'>Node</span>(_, <span class='kw-2'>ref</span> <span class='ident'>x</span>) <span class='op'>=&gt;</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>x</span>.<span class='ident'>as_ref</span>()],
-                <span class='ident'>TestNode</span>::<span class='ident'>Two</span>(_, <span class='kw-2'>ref</span> <span class='ident'>x</span>, <span class='kw-2'>ref</span> <span class='ident'>y</span>) <span class='op'>=&gt;</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>x</span>.<span class='ident'>as_ref</span>(), <span class='ident'>y</span>.<span class='ident'>as_ref</span>()],
+        <span class="kw">fn</span> <span class="ident">children</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">AstNode</span><span class="op">&gt;</span> {
+            <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+                <span class="ident">TestNode</span>::<span class="ident">Leaf</span>(_) <span class="op">=&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[],
+                <span class="ident">TestNode</span>::<span class="ident">Node</span>(_, <span class="kw-2">ref</span> <span class="ident">x</span>) <span class="op">=&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">x</span>.<span class="ident">as_ref</span>()],
+                <span class="ident">TestNode</span>::<span class="ident">Two</span>(_, <span class="kw-2">ref</span> <span class="ident">x</span>, <span class="kw-2">ref</span> <span class="ident">y</span>) <span class="op">=&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">x</span>.<span class="ident">as_ref</span>(), <span class="ident">y</span>.<span class="ident">as_ref</span>()],
             }
         }
 
-        <span class='kw'>fn</span> <span class='ident'>replace_child</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>old_child</span>: <span class='kw-2'>&amp;</span><span class='ident'>AstNode</span>, <span class='ident'>new_child</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span> {
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='kw'>match</span> <span class='kw-2'>*</span><span class='self'>self</span> {
-                <span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(_) <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>clone</span>(),
-                <span class='ident'>TestNode</span>::<span class='ident'>Node</span>(<span class='ident'>n</span>, <span class='kw-2'>ref</span> <span class='ident'>x</span>) <span class='op'>=&gt;</span> <span class='ident'>TestNode</span>::<span class='ident'>Node</span>(<span class='ident'>n</span>,
-                                                           <span class='ident'>clone_or_replace</span>(<span class='ident'>x</span>, <span class='ident'>old_child</span>, <span class='ident'>new_child</span>)),
-                <span class='ident'>TestNode</span>::<span class='ident'>Two</span>(<span class='ident'>n</span>, <span class='kw-2'>ref</span> <span class='ident'>x</span>, <span class='kw-2'>ref</span> <span class='ident'>y</span>) <span class='op'>=&gt;</span> <span class='ident'>TestNode</span>::<span class='ident'>Two</span>(<span class='ident'>n</span>,
-                                                                <span class='ident'>clone_or_replace</span>(<span class='ident'>x</span>, <span class='ident'>old_child</span>, <span class='ident'>new_child</span>),
-                                                                <span class='ident'>clone_or_replace</span>(<span class='ident'>y</span>, <span class='ident'>old_child</span>, <span class='ident'>new_child</span>)),
+        <span class="kw">fn</span> <span class="ident">replace_child</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">old_child</span>: <span class="kw-2">&amp;</span><span class="ident">AstNode</span>, <span class="ident">new_child</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span> {
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+                <span class="ident">TestNode</span>::<span class="ident">Leaf</span>(_) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">clone</span>(),
+                <span class="ident">TestNode</span>::<span class="ident">Node</span>(<span class="ident">n</span>, <span class="kw-2">ref</span> <span class="ident">x</span>) <span class="op">=&gt;</span> <span class="ident">TestNode</span>::<span class="ident">Node</span>(<span class="ident">n</span>,
+                                                           <span class="ident">clone_or_replace</span>(<span class="ident">x</span>, <span class="ident">old_child</span>, <span class="ident">new_child</span>)),
+                <span class="ident">TestNode</span>::<span class="ident">Two</span>(<span class="ident">n</span>, <span class="kw-2">ref</span> <span class="ident">x</span>, <span class="kw-2">ref</span> <span class="ident">y</span>) <span class="op">=&gt;</span> <span class="ident">TestNode</span>::<span class="ident">Two</span>(<span class="ident">n</span>,
+                                                                <span class="ident">clone_or_replace</span>(<span class="ident">x</span>, <span class="ident">old_child</span>, <span class="ident">new_child</span>),
+                                                                <span class="ident">clone_or_replace</span>(<span class="ident">y</span>, <span class="ident">old_child</span>, <span class="ident">new_child</span>)),
             })
         }
     }
 
-    <span class='kw'>impl</span> <span class='ident'>Mutatable</span> <span class='kw'>for</span> <span class='ident'>TestNode</span> {
-        <span class='kw'>fn</span> <span class='ident'>mutate</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, _: <span class='ident'>i32</span>, _: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Rng</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span> {
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='self'>self</span>.<span class='ident'>clone</span>())
+    <span class="kw">impl</span> <span class="ident">Mutatable</span> <span class="kw">for</span> <span class="ident">TestNode</span> {
+        <span class="kw">fn</span> <span class="ident">mutate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, _: <span class="ident">i32</span>, _: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Rng</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span> {
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">clone</span>())
         }
     }
 
-    <span class='kw'>fn</span> <span class='ident'>expect_node</span>(<span class='ident'>value</span>: <span class='ident'>u32</span>, <span class='ident'>ast</span>: <span class='kw-2'>&amp;</span><span class='ident'>AstNode</span>) {
-        <span class='kw'>let</span> <span class='ident'>x</span> <span class='op'>=</span> <span class='ident'>ast</span>.<span class='ident'>downcast_ref</span>::<span class='op'>&lt;</span><span class='ident'>TestNode</span><span class='op'>&gt;</span>().<span class='ident'>unwrap</span>();
-        <span class='kw'>if</span> <span class='kw'>let</span> <span class='ident'>TestNode</span>::<span class='ident'>Node</span>(<span class='ident'>v</span>, _) <span class='op'>=</span> <span class='kw-2'>*</span><span class='ident'>x</span> {
-            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>v</span> <span class='op'>==</span> <span class='ident'>value</span>);
-        } <span class='kw'>else</span> {
-            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='bool-val'>false</span>);
+    <span class="kw">fn</span> <span class="ident">expect_node</span>(<span class="ident">value</span>: <span class="ident">u32</span>, <span class="ident">ast</span>: <span class="kw-2">&amp;</span><span class="ident">AstNode</span>) {
+        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">ast</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">TestNode</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>();
+        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">TestNode</span>::<span class="ident">Node</span>(<span class="ident">v</span>, _) <span class="op">=</span> <span class="kw-2">*</span><span class="ident">x</span> {
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">v</span> <span class="op">==</span> <span class="ident">value</span>);
+        } <span class="kw">else</span> {
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>);
         }
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_find_parents</span>() {
-        <span class='kw'>let</span> <span class='ident'>tree</span> <span class='op'>=</span> <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Node</span>(<span class='number'>0</span>,
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Node</span>(<span class='number'>1</span>,
-                    <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Node</span>(<span class='number'>2</span>,
-                            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(<span class='number'>3</span>))))))));
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_find_parents</span>() {
+        <span class="kw">let</span> <span class="ident">tree</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Node</span>(<span class="number">0</span>,
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Node</span>(<span class="number">1</span>,
+                    <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Node</span>(<span class="number">2</span>,
+                            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Leaf</span>(<span class="number">3</span>))))))));
 
-        <span class='kw'>let</span> <span class='ident'>results</span> <span class='op'>=</span> <span class='ident'>find_nodes_and_parents</span>(<span class='ident'>tree</span>.<span class='ident'>as_ref</span>());
+        <span class="kw">let</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">find_nodes_and_parents</span>(<span class="ident">tree</span>.<span class="ident">as_ref</span>());
 
-        <span class='ident'>expect_node</span>(<span class='number'>0</span>, <span class='ident'>results</span>[<span class='number'>0</span>].<span class='ident'>node</span>);
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>results</span>[<span class='number'>0</span>].<span class='ident'>root_path</span>.<span class='ident'>is_none</span>());
+        <span class="ident">expect_node</span>(<span class="number">0</span>, <span class="ident">results</span>[<span class="number">0</span>].<span class="ident">node</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">results</span>[<span class="number">0</span>].<span class="ident">root_path</span>.<span class="ident">is_none</span>());
 
-        <span class='ident'>expect_node</span>(<span class='number'>1</span>, <span class='ident'>results</span>[<span class='number'>1</span>].<span class='ident'>node</span>);
-        <span class='ident'>expect_node</span>(<span class='number'>0</span>, <span class='ident'>results</span>[<span class='number'>1</span>].<span class='ident'>root_path</span>.<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>().<span class='ident'>node</span>);
+        <span class="ident">expect_node</span>(<span class="number">1</span>, <span class="ident">results</span>[<span class="number">1</span>].<span class="ident">node</span>);
+        <span class="ident">expect_node</span>(<span class="number">0</span>, <span class="ident">results</span>[<span class="number">1</span>].<span class="ident">root_path</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">node</span>);
 
-        <span class='ident'>expect_node</span>(<span class='number'>2</span>, <span class='ident'>results</span>[<span class='number'>2</span>].<span class='ident'>node</span>);
-        <span class='ident'>expect_node</span>(<span class='number'>1</span>, <span class='ident'>results</span>[<span class='number'>2</span>].<span class='ident'>root_path</span>.<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>().<span class='ident'>node</span>);
-        <span class='ident'>expect_node</span>(<span class='number'>0</span>, <span class='ident'>results</span>[<span class='number'>2</span>].<span class='ident'>root_path</span>.<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>().<span class='ident'>root_path</span>.<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>().<span class='ident'>node</span>);
+        <span class="ident">expect_node</span>(<span class="number">2</span>, <span class="ident">results</span>[<span class="number">2</span>].<span class="ident">node</span>);
+        <span class="ident">expect_node</span>(<span class="number">1</span>, <span class="ident">results</span>[<span class="number">2</span>].<span class="ident">root_path</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">node</span>);
+        <span class="ident">expect_node</span>(<span class="number">0</span>, <span class="ident">results</span>[<span class="number">2</span>].<span class="ident">root_path</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">root_path</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">node</span>);
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_replace_child</span>() {
-        <span class='kw'>let</span> <span class='ident'>tree</span> <span class='op'>=</span> <span class='ident'>TestNode</span>::<span class='ident'>Two</span>(<span class='number'>0</span>,
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(<span class='number'>1</span>)),
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(<span class='number'>2</span>)));
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_replace_child</span>() {
+        <span class="kw">let</span> <span class="ident">tree</span> <span class="op">=</span> <span class="ident">TestNode</span>::<span class="ident">Two</span>(<span class="number">0</span>,
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Leaf</span>(<span class="number">1</span>)),
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Leaf</span>(<span class="number">2</span>)));
 
-        <span class='kw'>let</span> <span class='ident'>old_child</span> <span class='op'>=</span> <span class='ident'>tree</span>.<span class='ident'>children</span>()[<span class='number'>1</span>];
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>new_child</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(<span class='number'>3</span>)) <span class='kw'>as</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>AstNode</span><span class='op'>&gt;</span>);
-        <span class='kw'>let</span> <span class='ident'>new_tree</span> <span class='op'>=</span> <span class='ident'>tree</span>.<span class='ident'>replace_child</span>(<span class='ident'>old_child</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>new_child</span>);
+        <span class="kw">let</span> <span class="ident">old_child</span> <span class="op">=</span> <span class="ident">tree</span>.<span class="ident">children</span>()[<span class="number">1</span>];
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_child</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Leaf</span>(<span class="number">3</span>)) <span class="kw">as</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">AstNode</span><span class="op">&gt;</span>);
+        <span class="kw">let</span> <span class="ident">new_tree</span> <span class="op">=</span> <span class="ident">tree</span>.<span class="ident">replace_child</span>(<span class="ident">old_child</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">new_child</span>);
 
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>TestNode</span>::<span class='ident'>Two</span>(<span class='number'>0</span>,
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(<span class='number'>1</span>)),
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(<span class='number'>3</span>))), <span class='ident'>new_tree</span>.<span class='ident'>downcast_ref</span>::<span class='op'>&lt;</span><span class='ident'>TestNode</span><span class='op'>&gt;</span>().<span class='ident'>unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">TestNode</span>::<span class="ident">Two</span>(<span class="number">0</span>,
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Leaf</span>(<span class="number">1</span>)),
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Leaf</span>(<span class="number">3</span>))), <span class="ident">new_tree</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">TestNode</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>());
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_depth</span>() {
-        <span class='kw'>let</span> <span class='ident'>tree</span> <span class='op'>=</span> <span class='ident'>TestNode</span>::<span class='ident'>Two</span>(<span class='number'>0</span>,
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(<span class='number'>1</span>)),
-            <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>TestNode</span>::<span class='ident'>Leaf</span>(<span class='number'>2</span>)));
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_depth</span>() {
+        <span class="kw">let</span> <span class="ident">tree</span> <span class="op">=</span> <span class="ident">TestNode</span>::<span class="ident">Two</span>(<span class="number">0</span>,
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Leaf</span>(<span class="number">1</span>)),
+            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TestNode</span>::<span class="ident">Leaf</span>(<span class="number">2</span>)));
 
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>2</span>, <span class='ident'>depth</span>(<span class='kw-2'>&amp;</span><span class='ident'>tree</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">depth</span>(<span class="kw-2">&amp;</span><span class="ident">tree</span>));
     }
 }
 </pre>
