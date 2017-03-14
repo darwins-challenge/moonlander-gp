@@ -9,6 +9,7 @@
 
     <title>crossover.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -108,7 +109,7 @@
 
     <span class='comment'>// Return all types that are in both maps (there is guaranteed to be at least 1)</span>
     <span class='kw'>let</span> <span class='ident'>shared_node_types</span> <span class='op'>=</span> <span class='ident'>nodes1</span>.<span class='ident'>iter</span>()
-            .<span class='ident'>filter_map</span>(<span class='op'>|</span>(<span class='ident'>typ</span>, _)<span class='op'>|</span> <span class='ident'>nodes2</span>.<span class='ident'>get</span>(<span class='ident'>typ</span>).<span class='ident'>map</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='op'>*</span><span class='ident'>typ</span>))
+            .<span class='ident'>filter_map</span>(<span class='op'>|</span>(<span class='ident'>typ</span>, _)<span class='op'>|</span> <span class='ident'>nodes2</span>.<span class='ident'>get</span>(<span class='ident'>typ</span>).<span class='ident'>map</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='kw-2'>*</span><span class='ident'>typ</span>))
             .<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;&gt;</span>();
     <span class='kw'>let</span> <span class='ident'>typ</span> <span class='op'>=</span> <span class='ident'>rng</span>.<span class='ident'>choose</span>(<span class='kw-2'>&amp;</span><span class='ident'>shared_node_types</span>).<span class='ident'>unwrap</span>();
 

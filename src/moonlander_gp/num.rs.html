@@ -9,6 +9,7 @@
 
     <title>num.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
     
@@ -113,7 +114,7 @@
     <span class='ident'>iter</span>.<span class='ident'>fold</span>(<span class='prelude-val'>None</span>, <span class='op'>|</span><span class='ident'>ret</span>, <span class='ident'>x</span><span class='op'>|</span> {
         <span class='kw'>match</span> <span class='ident'>ret</span> {
             <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
-            <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>y</span>) <span class='kw'>if</span> <span class='ident'>x</span> <span class='op'>&gt;</span> <span class='op'>*</span><span class='ident'>y</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
+            <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>y</span>) <span class='kw'>if</span> <span class='ident'>x</span> <span class='op'>&gt;</span> <span class='kw-2'>*</span><span class='ident'>y</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
             _ <span class='op'>=&gt;</span> <span class='ident'>ret</span>
         }
     })
@@ -125,7 +126,7 @@
     <span class='ident'>iter</span>.<span class='ident'>fold</span>(<span class='prelude-val'>None</span>, <span class='op'>|</span><span class='ident'>ret</span>, <span class='ident'>x</span><span class='op'>|</span> {
         <span class='kw'>match</span> <span class='ident'>ret</span> {
             <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
-            <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>y</span>) <span class='kw'>if</span> <span class='ident'>x</span> <span class='op'>&lt;</span> <span class='op'>*</span><span class='ident'>y</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
+            <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>y</span>) <span class='kw'>if</span> <span class='ident'>x</span> <span class='op'>&lt;</span> <span class='kw-2'>*</span><span class='ident'>y</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>x</span>),
             _ <span class='op'>=&gt;</span> <span class='ident'>ret</span>
         }
     })
@@ -153,7 +154,7 @@
 
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>test</span> {
-    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='op'>*</span>;
+    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw-2'>*</span>;
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_torus</span>() {

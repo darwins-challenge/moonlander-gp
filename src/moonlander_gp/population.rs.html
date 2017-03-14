@@ -9,6 +9,7 @@
 
     <title>population.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
     
@@ -137,7 +138,7 @@
 <span class='kw'>use</span> <span class='ident'>rand</span>::<span class='ident'>Rng</span>;
 <span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>Number</span>;
 <span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>num</span>::{<span class='ident'>sum</span>, <span class='ident'>partial_max</span>};
-<span class='kw'>use</span> <span class='ident'>rayon</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
+<span class='kw'>use</span> <span class='ident'>rayon</span>::<span class='ident'>prelude</span>::<span class='kw-2'>*</span>;
 <span class='kw'>use</span> <span class='ident'>rustc_serialize</span>::<span class='ident'>Encodable</span>;
 
 
@@ -198,7 +199,7 @@
         <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>Encodable</span>, <span class='ident'>F</span>: <span class='ident'>Encodable</span>
     {
         <span class='kw'>let</span> <span class='ident'>indexes</span> <span class='op'>=</span> <span class='number'>0</span>..<span class='self'>self</span>.<span class='ident'>n</span>();
-        <span class='kw'>let</span> <span class='ident'>winner_i</span> <span class='op'>=</span> <span class='ident'>indexes</span>.<span class='ident'>into_iter</span>().<span class='ident'>max_by_key</span>(<span class='op'>|</span><span class='ident'>i</span><span class='op'>|</span> <span class='self'>self</span>.<span class='ident'>scores</span>[<span class='op'>*</span><span class='ident'>i</span>].<span class='ident'>score_card</span>()).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>winner_i</span> <span class='op'>=</span> <span class='ident'>indexes</span>.<span class='ident'>into_iter</span>().<span class='ident'>max_by_key</span>(<span class='op'>|</span><span class='ident'>i</span><span class='op'>|</span> <span class='self'>self</span>.<span class='ident'>scores</span>[<span class='kw-2'>*</span><span class='ident'>i</span>].<span class='ident'>score_card</span>()).<span class='ident'>unwrap</span>();
         <span class='ident'>CreatureScore</span> {
             <span class='ident'>generation</span>: <span class='self'>self</span>.<span class='ident'>generation</span>,
             <span class='ident'>program</span>: <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>population</span>[<span class='ident'>winner_i</span>],
@@ -210,8 +211,8 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>best_n</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>n</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>
     {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>indexes</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span> <span class='op'>=</span> (<span class='number'>0</span>..<span class='self'>self</span>.<span class='ident'>n</span>()).<span class='ident'>collect</span>();
-        <span class='ident'>indexes</span>.<span class='ident'>sort_by_key</span>(<span class='op'>|</span><span class='ident'>i</span><span class='op'>|</span> <span class='self'>self</span>.<span class='ident'>scores</span>[<span class='op'>*</span><span class='ident'>i</span>].<span class='ident'>score_card</span>());
-        <span class='ident'>indexes</span>[<span class='ident'>indexes</span>.<span class='ident'>len</span>() <span class='op'>-</span> <span class='ident'>n</span>..].<span class='ident'>into_iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>i</span><span class='op'>|</span> <span class='self'>self</span>.<span class='ident'>population</span>[<span class='op'>*</span><span class='ident'>i</span>].<span class='ident'>clone</span>()).<span class='ident'>collect</span>()
+        <span class='ident'>indexes</span>.<span class='ident'>sort_by_key</span>(<span class='op'>|</span><span class='ident'>i</span><span class='op'>|</span> <span class='self'>self</span>.<span class='ident'>scores</span>[<span class='kw-2'>*</span><span class='ident'>i</span>].<span class='ident'>score_card</span>());
+        <span class='ident'>indexes</span>[<span class='ident'>indexes</span>.<span class='ident'>len</span>() <span class='op'>-</span> <span class='ident'>n</span>..].<span class='ident'>into_iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>i</span><span class='op'>|</span> <span class='self'>self</span>.<span class='ident'>population</span>[<span class='kw-2'>*</span><span class='ident'>i</span>].<span class='ident'>clone</span>()).<span class='ident'>collect</span>()
     }
 }
 

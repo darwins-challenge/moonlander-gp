@@ -9,6 +9,7 @@
 
     <title>evolve.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -134,7 +135,7 @@
                 <span class='kw'>let</span> <span class='ident'>winner</span> <span class='op'>=</span> <span class='ident'>selector</span>(<span class='kw-2'>&amp;</span><span class='ident'>pop</span>, <span class='ident'>rng</span>);
                 <span class='kw'>let</span> <span class='ident'>target_height</span> <span class='op'>=</span> <span class='ident'>rng</span>.<span class='ident'>next_u32</span>() <span class='kw'>as</span> <span class='ident'>i32</span> <span class='op'>%</span> <span class='ident'>weights</span>.<span class='ident'>tree_height</span>;
                 <span class='kw'>let</span> <span class='ident'>mutation</span> <span class='op'>=</span> <span class='ident'>mutate</span>::<span class='ident'>mutate_tree</span>(<span class='ident'>winner</span>, <span class='ident'>target_height</span>, <span class='ident'>rng</span>);
-                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='op'>*</span><span class='ident'>mutation</span>);
+                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='kw-2'>*</span><span class='ident'>mutation</span>);
             },
             <span class='ident'>weights</span>.<span class='ident'>crossover</span>, {
                 <span class='kw'>if</span> <span class='ident'>pop</span>.<span class='ident'>n</span>() <span class='op'>&lt;</span> <span class='number'>2</span> { <span class='kw'>continue</span>; }
@@ -146,8 +147,8 @@
 
                 <span class='comment'>// We insert both children, this might make the population go over size, but never</span>
                 <span class='comment'>// by more than 1.</span>
-                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='op'>*</span><span class='ident'>child1</span>);
-                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='op'>*</span><span class='ident'>child2</span>);
+                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='kw-2'>*</span><span class='ident'>child1</span>);
+                <span class='ident'>ret</span>.<span class='ident'>add</span>(<span class='kw-2'>*</span><span class='ident'>child2</span>);
             }
         ];
     }

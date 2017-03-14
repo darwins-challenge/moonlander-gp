@@ -9,6 +9,7 @@
 
     <title>consumer.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
     
@@ -144,8 +145,8 @@
 <span id="100">100</span>
 <span id="101">101</span>
 </pre><pre class='rust '>
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::<span class='ident'>len</span>::<span class='op'>*</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::<span class='ident'>internal</span>::<span class='op'>*</span>;
+<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::<span class='ident'>len</span>::<span class='kw-2'>*</span>;
+<span class='kw'>use</span> <span class='kw'>super</span>::<span class='kw'>super</span>::<span class='ident'>internal</span>::<span class='kw-2'>*</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ptr</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::<span class='ident'>atomic</span>::{<span class='ident'>AtomicUsize</span>, <span class='ident'>Ordering</span>};
 
@@ -154,7 +155,7 @@
     <span class='doccomment'>/// safety in the face of panics or buggy parallel iterators.</span>
     <span class='ident'>writes</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;c</span> <span class='ident'>AtomicUsize</span>,
 
-    <span class='ident'>target</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ITEM</span>,
+    <span class='ident'>target</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>ITEM</span>,
 
     <span class='doccomment'>/// Invariant: we can safely write from `target` .. `target+len`</span>
     <span class='ident'>len</span>: <span class='ident'>usize</span>,
@@ -179,7 +180,7 @@
     <span class='doccomment'>/// Unsafe because caller must assert that `target..target+len` is</span>
     <span class='doccomment'>/// an unaliased, writable region.</span>
     <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>writes</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;c</span> <span class='ident'>AtomicUsize</span>,
-                      <span class='ident'>target</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ITEM</span>,
+                      <span class='ident'>target</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>ITEM</span>,
                       <span class='ident'>len</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>CollectConsumer</span><span class='op'>&lt;</span><span class='ident'>ITEM</span><span class='op'>&gt;</span> {
         <span class='ident'>CollectConsumer</span> { <span class='ident'>writes</span>: <span class='ident'>writes</span>, <span class='ident'>target</span>: <span class='ident'>target</span>, <span class='ident'>len</span>: <span class='ident'>len</span> }
     }
